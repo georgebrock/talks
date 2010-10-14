@@ -109,18 +109,14 @@
 
     <div class='slide'>
       <h4>Structured JavaScript</h4>
-      <pre><code class='javascript'><mark title='Everything contained in one object'>MyApp.imageGallery</mark> = (<mark title='A function creates a new variable scope'>function</mark>() {
+      <pre><code class='javascript'><span class='annotation' title='Everything contained in one object'>MyApp.imageGallery</span> = (<span class='annotation' title='A function creates a new variable scope'>function</span>() {
 
-  <mark title='Use closure to create private variables and methods'>// Private variables and functions</mark>
-  var privateVariable = 'foo';
-  var privateFunction = function() {
-  };
+<span class='annotation' title='Use closure to create private variables and methods'>  var imagesURL = 'http://example.org/images/';
+  var loadImages = function() { … };</span>
 
-  <mark title='Return an object defining the public interface'>// Public interface</mark>
-  return {
-    publicMethod: function() {
-    }
-  };
+<span class='annotation' title='Return an object defining the public interface'>  return {
+    showLightbox: function() { … }
+  };</span>
 
 }());</code></pre>
     </div>
