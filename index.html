@@ -168,11 +168,8 @@
     <div class='slide'>
       <h5>Common JavaScript API</h5>
       <pre><code class='javascript'>MyApp.imageGallery = (function() {
-
-  // Private variables and functions
   …
 
-  // Public interface
   return {
     <mark title='Setup code to run on every page'>globalInit</mark>:   function() { … },
     <mark title='Setup code to run only when it is needed'>init</mark>:         function() { … }
@@ -193,12 +190,10 @@
 <span class='annotation' title='Iterate over the features defined in MyApp'>for(key in MyApp) {
   if(MyApp.hasOwnProperty(key)) {</span>
 
-    // Global initialisation
 <span class='annotation' title='Run global initialisation code'>    if(typeof MyApp[key].globalInit === "function") {
       MyApp[key].globalInit();
     }</span>
 
-    // Specific initialisation
 <span class='annotation' title='Run the initialisation code if this page has requested'>    if(typeof MyApp[key].init === "function" &amp;&amp;
        jQuery('body').hasClass(classNameFromKey(key))) {
       MyApp[key].init(context);
