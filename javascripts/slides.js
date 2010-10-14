@@ -1,6 +1,7 @@
 var Slides = (function() {
 
   var runLink, currentSlide, currentElement;
+  var highlightSelector = 'ins, mark, .annotation';
 
   var start = function() {
     $('.slide, .notes').hide();
@@ -18,7 +19,7 @@ var Slides = (function() {
   var next = function() {
     var elNo, slideNo, elementCount;
 
-    elementCount = $('.slide:eq(' + currentSlide + ')').find('ins').length;
+    elementCount = $('.slide:eq(' + currentSlide + ')').find(highlightSelector).length;
     if(currentElement < elementCount - 1) {
       slideNo = currentSlide;
       elNo = currentElement + 1;
@@ -34,13 +35,13 @@ var Slides = (function() {
   var previous = function() {
     var elNo, slideNo, elementCount;
 
-    elementCount = $('.slide:eq(' + currentSlide + ')').find('ins').length;
+    elementCount = $('.slide:eq(' + currentSlide + ')').find(highlightSelector).length;
     if(elementCount > 0 && currentElement > -1 || currentElement > 0) {
       slideNo = currentSlide;
       elNo = currentElement - 1;
     } else {
       slideNo = currentSlide - 1;
-      elNo = $('.slide:eq(' + (currentSlide - 1) + ')').find('ins').length - 1;
+      elNo = $('.slide:eq(' + (currentSlide - 1) + ')').find(highlightSelector).length - 1;
     }
 
     show(slideNo, elNo);
@@ -53,7 +54,7 @@ var Slides = (function() {
     var slide = $('.slide:eq(' + currentSlide + ')');
     slide.show();
 
-    slide.find('ins').removeClass('past present future').each(function(i) {
+    slide.find(highlightSelector).removeClass('past present future').each(function(i) {
       if(i < elNo) { $(this).addClass('past'); }
       else if(i === elNo) { $(this).addClass('present'); }
       else { $(this).addClass('future'); }

@@ -22,6 +22,10 @@ dfn {
   font-style: italic;
 }
 
+mark {
+  color: inherit;
+}
+
 a.run-slideshow {
   font-family: 'Arial', sans-serif;
   font-size: 0.8em;
@@ -120,7 +124,7 @@ body.slideshow .slide {
   width: 1024px;
 }
 body.slideshow .slide code {
-  font-size: 30px;
+  font-size: 75%;
 }
 body.slideshow .slide h1,
 body.slideshow .slide h2,
@@ -143,4 +147,15 @@ body.slideshow .slide ins.present {
 }
 body.slideshow .slide ins.future {
   display: none;
+}
+
+body.slideshow .slide mark.past,
+body.slideshow .slide mark.future,
+body.slideshow .slide span.annotation.past,
+body.slideshow .slide span.annotation.future {
+  background: none;
+}
+body.slideshow .slide mark.present,
+body.slideshow .slide span.annotation.present {
+  background: yellow;
 }
