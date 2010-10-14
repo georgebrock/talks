@@ -194,19 +194,22 @@
       <h5>A little bit of glue…</h5>
       <pre><code class='javascript'>var key, className;
 for(key in MyApp) {
-  if(MyApp.<mark title="Check that the property didn't come from the MyApp object's prototype">hasOwnProperty</mark>(key)) {
+  if(MyApp.hasOwnProperty(key)) {
 
     // Global initialisation
-    if(<mark title='Check that this object has a globalInit function'>typeof MyApp[key].globalInit === "function"</mark>) {
+    if(typeof MyApp[key].globalInit === "function") {
       MyApp[key].global_init();
     }
 
     // Specific initialisation
-    className = 'with-js-' + key.replace(/[a-z][A-Z]/g, <mark title='Similar to passing a block to gsub in Ruby'>function</mark>(str) { return str[0] + '-' + str[1].toLowerCase(); });
-    if(typeof MyApp[key].init === "function" &amp;&amp; $('body').hasClass(className)) {
+    className = 'with-js-' + key.replace(/[a-z][A-Z]/g, function(str) {
+      return str[0] + '-' + str[1].toLowerCase();
+    });
+
+    if(typeof MyApp[key].init === "function" &amp;&amp;
+       $('body').hasClass(className)) {
       MyApp[key].init(context);
     }
-
   }
 }</code></pre>
     </div>
