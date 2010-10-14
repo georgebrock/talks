@@ -159,3 +159,15 @@ body.slideshow .slide mark.present,
 body.slideshow .slide span.annotation.present {
   background: yellow;
 }
+
+body.slideshow .slide .present .title {
+  font-family: 'Arial', sans-serif;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  color: #fff;
+  background: rgba(0,0,0,0.9);
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+}
