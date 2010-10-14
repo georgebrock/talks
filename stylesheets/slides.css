@@ -39,15 +39,16 @@ a.run-slideshow {
 }
 
 .slide {
+  position: relative;
   padding: 20px;
   margin: 10px 0 20px 10px;
   -webkit-box-shadow: rgba(0,0,0,0.25) -5px 5px 20px;
   border: 1px solid #999;
-  margin-bottom: 1em;
   width: 640px;
 }
 .notes {
   color: #666;
+  margin-left: 30px;
 }
 .slide code {
   display: block;
@@ -63,6 +64,9 @@ a.run-slideshow {
   text-align: center;
   font-size: 30px;
   margin: 0 0 10px 0;
+}
+.slide h1 {
+  font-size: 40px;
 }
 .slide h1 code,
 .slide h2 code,
@@ -120,13 +124,15 @@ body.slideshow .slide {
   margin: 0;
   -webkit-box-shadow: none;
   margin: 0 auto;
-  padding: 60px 0 0;
+  padding: 60px 0;
   width: 1024px;
 }
 body.slideshow .slide code {
   font-size: 75%;
 }
-body.slideshow .slide h1,
+body.slideshow .slide h1 {
+  font-size: 80px;
+}
 body.slideshow .slide h2,
 body.slideshow .slide h3,
 body.slideshow .slide h4,
