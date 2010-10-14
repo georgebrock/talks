@@ -350,7 +350,11 @@ end</code></pre>
 
     <div class='slide'>
       <h3>ERB in JavaScript</h3>
-      <p><code><span class='javascript'>link.html(</span><span class='ruby'>&lt;%= I18n.t('click_me').<mark title='JSON is a subset of JavaScript'>to_json</mark> %&gt;</span><span class='javascript'>);</span></code></p>
+      <p>
+        <code class='javascript'>$('&lt;a&gt;&lt;/a&gt;').text('More');</code>
+        could be rewritten as
+        <code><span class='javascript'>$('&lt;a&gt;&lt;/a&gt;').text(</span><span class='ruby'>&lt;%= I18n.t('more').<mark title='JSON is a subset of JavaScript'>to_json</mark> %&gt;</span><span class='javascript'>);</span></code>
+      </p>
     </div>
 
     <ul class='notes'>
