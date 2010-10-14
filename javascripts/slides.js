@@ -1,6 +1,7 @@
 var Slides = (function() {
 
-  var runLink, currentSlide;
+  var runLink, currentSlide, currentElement;
+
   var start = function() {
     $('.slide, .notes').hide();
     runLink.hide();
@@ -15,17 +16,48 @@ var Slides = (function() {
   }
 
   var next = function() {
-    show(currentSlide + 1);
+    var elNo, slideNo, elementCount;
+
+    elementCount = $('.slide:eq(' + currentSlide + ')').find('ins').length;
+    if(currentElement < elementCount - 1) {
+      slideNo = currentSlide;
+      elNo = currentElement + 1;
+    } else {
+      slideNo = currentSlide + 1;
+      elNo = -1;
+    }
+
+    console.log(slideNo, elNo);
+    show(slideNo, elNo);
   }
 
   var previous = function() {
-    show(currentSlide - 1);
+    var elNo, slideNo, elementCount;
+
+    elementCount = $('.slide:eq(' + currentSlide + ')').find('ins').length;
+    if(elementCount > 0 && currentElement > -1 || currentElement > 0) {
+      slideNo = currentSlide;
+      elNo = currentElement - 1;
+    } else {
+      slideNo = currentSlide - 1;
+      elNo = $('.slide:eq(' + (currentSlide - 1) + ')').find('ins').length - 1;
+    }
+
+    show(slideNo, elNo);
   }
 
-  var show = function(n) {
-    currentSlide = n;
+  var show = function(slideNo, elNo) {
+    currentSlide = slideNo;
+    currentElement = elNo;
     $('.slide').hide();
-    $('.slide:eq(' + currentSlide + ')').show();
+    var slide = $('.slide:eq(' + currentSlide + ')');
+    slide.show();
+
+    slide.find('ins').removeClass('past present future').each(function(i) {
+      if(i < elNo) { $(this).addClass('past'); }
+      else if(i === elNo) { $(this).addClass('present'); }
+      else { $(this).addClass('future'); }
+    });
   }
 
   return {

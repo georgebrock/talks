@@ -130,3 +130,17 @@ body.slideshow .slide h5,
 body.slideshow .slide h6 {
   font-size: 60px;
 }
+
+body.slideshow ins {
+  text-decoration: none;
+}
+body.slideshow .slide ins.past {
+  display: inline;
+}
+body.slideshow .slide ins.present {
+  display: inline;
+  background: yellow;
+}
+body.slideshow .slide ins.future {
+  display: none;
+}
