@@ -161,7 +161,7 @@
 
     <div class='slide'>
       <h5>Ask the HTML what it needs</h5>
-      <p><code class='html'>&lt;body class='<mark title='A common prefix for the JavaScript to look for'>with-js-</mark><mark title='The name of the feature we want to enable'>form-validation</mark>'&gt;</code></p>
+      <p><code class='html'>&lt;body class='<mark title='A common prefix for the JavaScript to look for'>with-js-</mark><mark title='The name of the feature we want to enable'>image-gallery</mark>'&gt;</code></p>
     </div>
 
     <ul class='notes'>
@@ -171,12 +171,18 @@
 
     <div class='slide'>
       <h5>Common JavaScript API</h5>
-      <pre><code class='javascript'>// Public interface
-return {
-  <mark title='Setup code to run on every page'>globalInit</mark>:   function() { … },
-  <mark title='Setup code to run only when it is needed'>init</mark>:         function() { … },
+      <pre><code class='javascript'>MyApp.imageGallery = (function() {
+
+  // Private variables and functions
   …
-};</code></pre>
+
+  // Public interface
+  return {
+    <mark title='Setup code to run on every page'>globalInit</mark>:   function() { … },
+    <mark title='Setup code to run only when it is needed'>init</mark>:         function() { … }
+  };
+
+}());</code></pre>
     </div>
 
     <ul class='notes'>
