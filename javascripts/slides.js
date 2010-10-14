@@ -28,7 +28,6 @@ var Slides = (function() {
       elNo = -1;
     }
 
-    console.log(slideNo, elNo);
     show(slideNo, elNo);
   }
 
