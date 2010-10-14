@@ -1,0 +1,123 @@
+body {
+  font-family: 'Georgia', 'Times', serif;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: #1278db;
+  text-decoration: none;
+}
+a:hover,
+a:focus,
+a:active {
+  text-decoration: underline;
+}
+
+a.run-slideshow {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.8em;
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 10px;
+  padding: 5px;
+  background: #d00;
+  color: #fff;
+}
+
+.slide {
+  padding: 20px;
+  margin: 10px 0 20px 10px;
+  -webkit-box-shadow: rgba(0,0,0,0.25) -5px 5px 20px;
+  border: 1px solid #999;
+  margin-bottom: 1em;
+  width: 640px;
+}
+.notes {
+  color: #666;
+}
+.slide code {
+  display: block;
+  text-align: left;
+  margin: 10px 0;
+}
+.slide h1,
+.slide h2,
+.slide h3,
+.slide h4,
+.slide h5,
+.slide h6 {
+  text-align: center;
+  font-size: 30px;
+  margin: 0 0 10px 0;
+}
+.slide h1 code,
+.slide h2 code,
+.slide h3 code,
+.slide h4 code,
+.slide h5 code,
+.slide h6 code {
+  display: inline;
+  margin: 0;
+}
+.slide p {
+  text-align: center;
+}
+.slide blockquote {
+  margin: 0;
+}
+.slide blockquote p {
+  text-align: left;
+}
+.slide blockquote p:first-of-type:before {
+  content: '“';
+}
+.slide blockquote p:nth-last-of-type(2):after {
+  content: '”';
+}
+.slide blockquote p.citation:before {
+  content: '– ';
+}
+.slide address {
+  text-align: center;
+  font-style: normal;
+}
+.todo {
+  color: #cf2332;
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  background: #fdd;
+  padding: 3px;
+  font-size: 80%;
+}
+.todo:before {
+  content: 'TODO: ';
+}
+
+.ruby { color: #800; }
+.html { color: #080; }
+.javascript { color: #008; }
+.css { color: #c50; }
+
+body.slideshow {
+  font-size: 40px;
+}
+body.slideshow .slide {
+  border: none;
+  margin: 0;
+  -webkit-box-shadow: none;
+  margin: 0 auto;
+  padding: 60px 0 0;
+  width: 1024px;
+}
+body.slideshow .slide code {
+  font-size: 30px;
+}
+body.slideshow .slide h1,
+body.slideshow .slide h2,
+body.slideshow .slide h3,
+body.slideshow .slide h4,
+body.slideshow .slide h5,
+body.slideshow .slide h6 {
+  font-size: 60px;
+}

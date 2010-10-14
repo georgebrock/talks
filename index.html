@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Maintainable front-end code in Rails applications</title>
+    <link rel='stylesheet' type='text/css' charset='utf-8' href='stylesheets/slides.css' />
+    <script src='javascripts/jquery.min.js'></script>
+    <script src='javascripts/slides.js'></script>
+  </head>
+  <body>
+
+    <div class='slide'>
+      <h1>Maintainable front-end code in Ruby applications</h1>
+      <p>
+        by <strong>George Brocklehurst</strong>
+        from <strong>Reevoo</strong>
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Ruby is only half the battle</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>We run our Ruby code in very carfully curated environments, with the right version of Ruby and all our dependancies neatly installed by Bundler.</li>
+      <li>Front-end languages (particularly CSS, but also JavaScript to some extent) are often blamed for the short comings of the environment they run in.</li>
+      <li>There is some truly lovely stuff in CSS 3, it's just not implemented in all of the browsers yet.</li>
+      <li>You've probably seen some of the lovely CSS 3 selectors in jQuery, Prototype or Nokogiri. It's not CSS's fault that you can't use them in all the browsers!</li>
+      <li>It would be the same if we were forced to make all our apps run forever on Ruby 1.8 or Rails 2.3.</li>
+      <li>JavaScript and CSS are your friends!</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>JavaScript &amp; Rails</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Rails is opinionated, but before Rails 3 a lot of its opinions on JavaScript were either missing or just plain wrong.</li>
+      <li>There's still a lot we need to decide ourselves, but what is there is greatly improved in Rails 3.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>The icing on the cake</h3>
+    </div>
+
+    <ul class='notes'>
+      <li>Progressive enhancment: Start by marking up the content with HTML, then make it look nice with CSS, then smooth the rough edges with JavaScript.</li>
+      <li>Rails 2 pretty much ignored this approach.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>Hooray for Rails 3!</h3>
+      <p>JavaScript helpers are now <strong>unobtrusive</strong> and <strong>framework agnostic</strong>.</p>
+    </div>
+
+    <dl class='notes'>
+      <dt>Unobtrusive</dt>
+      <dd>JavaScript lives in <tt>.js</tt> files, not in <tt>.html</tt> files and the application still works if the <tt>.js</tt> files aren't loaded.</dd>
+      <dt>Framework agnostic</dt>
+      <dd>We don't have to use Prototype, but can replace it with the best framework for this particular team or project.</dd>
+    </dl>
+
+    <div class='slide'>
+      <h4>The bad old days</h4>
+
+      <p>
+        In Rails 2
+        <code class='ruby'>link_to_remote 'home', :url => root_path</code>
+        returns
+        <code class='html'>&lt;a <mark title='Meaningless URL'>href="#"</mark> <mark title='JavaScript in the HTML'>onclick</mark>="new <mark title='Prototype specific code'>Ajax.Request</mark>('/', {asynchronous:true, evalScripts:true, parameters:'authenticity_token=' + encodeURIComponent('1/GQG8AZN55Dpa…=')}); return false;"&gt;home&lt;/a&gt;</code>
+      </p>
+    </div>
+
+    <ul class='notes'>
+      <li>The link has a fake <code class='html''>href</code>, so it won't work without JavaScript.</li>
+      <li>The JavaScript is inserted directly into the HTML, so to customise it we would have to modify the Rails helper that generates it.</li>
+      <li>The JavaScript uses the <code class='javascript'>Ajax.Request</code> method, which is specific to the Prototype library.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>So much better</h4>
+      <p>
+        In Rails 3
+        <code class='ruby'>link_to 'home', root_path, :remote => true</code>
+        returns
+        <code class='html'>&lt;a <mark title='Meaningful URL'>href="/"</mark> <mark title='HTML5 data attributes'>data-remote="true"</mark>&gt;home&lt;/a&gt;</code>
+      </p>
+    </div>
+
+    <ul class='notes'>
+      <li>The link has a real <code class='html'>href</code>, so it will work without JavaScript.</li>
+      <li>The Ruby code we write to generate the link is much closer to the way we would create a non-JavaScript link (helps us think in the right way).</li>
+      <li>All the JavaScript is contained in <tt>rails.js</tt> and can be easily tweaked or replaced entirely without monkey patching Rails helpers.</li>
+      <li>There's no mention of anything specific to Prototype, jQuery or any other JavaScript framework.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>There's still enough rope to hang yourself</h4>
+      <p>
+        <code class='ruby'>link_to 'home', root_path, :remote => true, <mark title='This link should… post?!'>:method => 'post'</mark></code>
+      </p>
+    </div>
+
+    <ul class='notes'>
+      <li><code class='ruby'>link_to</code> can still be used to make <tt>POST</tt> requests, which will not work without JavaScript (or violating REST principles).</li>
+      <li>Some of the default scaffolding uses this approach.</li>
+      <li>
+        Try to use the appropriate HTML element for the request:
+        <ul>
+          <li>
+            For a request that modifies the state on the server, use a <tt>POST</tt> request and therefore a form
+            (<tt>PUT</tt> and <tt>DELETE</tt> are actually <tt>POST</tt> requests, because browsers only know <tt>GET</tt> and <tt>POST</tt>).
+          </li>
+          <li>
+            For a request that doesn't modify the state on the server, use a <tt>GET</tt> request and therefore a link
+            (or a form with <code class='html'>method='get'</code> if the user can set some parameters, e.g. in a search form)
+          </li>
+        </ul>
+      </li>
+      <li>If you want something that looks like a link, just style it to look like a link - that's what CSS is for!</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>Everybody stand back! I know CSS</h4>
+      <p class='citation'>
+        <cite>
+          Adapted from 
+          <a href='http://natbat.net/2009/Jun/10/styling-buttons-as-links/'>“Styling buttons as links”</a> by
+          <span class='vcard'><a class='fn url' href='http://natbat.net'>Natalie Downe</a></span>
+        </cite>
+      </p>
+      <pre><code class='css'>button.link {
+  border:            none;
+  background:        none;
+  <mark title='IE needs this to or it will add extra padding'>overflow:          visible;</mark>
+  width:             auto;
+  font-size:         1em;
+  margin:            0;
+  padding:           0;
+  cursor:            pointer;
+}
+
+<mark title='Firefox needs this or it will add extra padding'>button.link::-moz-focus-inner</mark> {
+  padding:           0;
+  border:            none;
+}
+
+button.link <mark title='Adding text styles to a span within a button is more reliable'>span</mark> {
+  text-decoration:   underline;
+  color:             #00f;
+}</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li><code class='css'>overflow:visible</code> stops IE adding extra width to the button.</li>
+      <li>The <code class='css'>::-moz-focus-inner</code> pseudo element stops Firefox adding extra padding to the button.</li>
+      <li>Putting a span inside the button and applying text styles to that is more reliable.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>Eventually, the helpers aren't enough</h3>
+    </div>
+
+    <div class='notes'>
+      As an app grows in size and complexity we are likely to want more JavaScript functionality than the Rails helpers can provide.
+      Usually we would create a new file in <tt>public/javascripts</tt> and just start hacking, but there are better ways.
+    </div>
+
+    <div class='slide'>
+      <h4>Structured JavaScript</h4>
+      <pre><code class='javascript'><mark title='Everything contained in one object'>MyApp.superCoolWidget</mark> = (<mark title='A function creates a new variable scope'>function</mark>() {
+
+  <mark title='Use closure to create private variables and methods'>// Private variables and functions</mark>
+  var privateVariable = 'foo';
+  var privateFunction = function() {
+  };
+
+  <mark title='Return an object defining the public interface'>// Public interface</mark>
+  return {
+    publicMethod: function() {
+    }
+  };
+
+}());</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>
+        JavaScript is far from perfect:
+        <ul>
+          <li>By default everything is in a global namespace (in the case of the browser, this is the <code class='javascript'>window</code> object).</li>
+          <li>The privacy and object models are very different from other languages (not really a problem, but it can make some things harder than in Ruby).</li>
+          <li>There is no block level scoping, so the only way to get a new variable scope is by defining a function.</li>
+        </ul>
+      </li>
+      <li>
+        JavaScript is also awesome, and in places a lot like Ruby:
+        <ul>
+          <li>Lexical scope and closures make lots of common Ruby idioms easy to implement in JavaScript.</li>
+          <li>
+            <a href='http://www.amazon.com/exec/obidos/ASIN/0596517742/wrrrldwideweb'>“JavaScript: The Good Parts”</a>
+            by <span class='vcard'><a href='http://www.crockford.com/' class='fn url'>Douglas Crockford</a></span>
+            is a good summary of the good parts of the language.
+          </li>
+        </ul>
+      </li>
+      <li>If we write all our JavaScript as methods on the <code class='javascript''>window</code> object, we'll end up in a mess.</li>
+      <li>Using <em>objects</em> to group related code and <em>immediately called functions</em> to create a private variable scope helps avoid conflicts.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>Initialising the right scripts</h4>
+    </div>
+
+    <ul class='notes'>
+      <li>Lots of JavaScript files means lots of HTTP requests, which is slow.</li>
+      <li>Running lots of unneeded JavaScript setup on every page can also be slow, e.g. why initialise inline form validation on a page with no forms?</li>
+      <li>It would be good if we can always load all of the JavaScript to reduce HTTP requests and benefit from cachine without always running all of it.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>Ask the HTML what it needs</h5>
+      <p><code class='html'>&lt;body class='<mark title='A common prefix for the JavaScript to look for'>with-js-</mark><mark title='The name of the feature we want to enable'>form-validation</mark>'&gt;</code></p>
+    </div>
+
+    <ul class='notes'>
+      <li>Class names on the body keeps everything in one place.</li>
+      <li>You could also use HTML5 <code class='html'>data-</code> attributes to be consistent with Rails 3.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>Common JavaScript API</h5>
+      <pre><code class='javascript'>// Public interface
+return {
+  <mark title='Setup code to run on every page'>globalInit</mark>:   function() { … },
+  <mark title='Setup code to run only when it is needed'>init</mark>:         function() { … },
+  …
+};</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>We've already talked about splitting our JavaScript into objects, so it makes sense to give those objects a consistent interface.</li>
+      <li>We use <code class='javascript'>init</code> for code that needs to be run on pages that specifically require this feature, and <code class='javascript'>globalInit</code> for code that needs to be run on all pages.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>A little bit of glue…</h5>
+      <pre><code class='javascript'>var key, className;
+for(key in MyApp) {
+  if(MyApp.<mark title="Check that the property didn't come from the MyApp object's prototype">hasOwnProperty</mark>(key)) {
+
+    // Global initialisation
+    if(<mark title='Check that this object has a globalInit function'>typeof MyApp[key].globalInit === "function"</mark>) {
+      MyApp[key].global_init();
+    }
+
+    // Specific initialisation
+    className = 'with-js-' + key.replace(/[a-z][A-Z]/g, <mark title='Similar to passing a block to gsub in Ruby'>function</mark>(str) { return str[0] + '-' + str[1].toLowerCase(); });
+    if(typeof MyApp[key].init === "function" &amp;&amp; $('body').hasClass(className)) {
+      MyApp[key].init(context);
+    }
+
+  }
+}</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>Iterate over all of the objects in <code class='javascript'>MyApp</code>.</li>
+      <li>We need to use <code class='javascript'>hasOwnProperty</code> to make sure the property hasn't come from the object's prototype.</li>
+      <li>We're checking that each object has an <code class='javascript'>init</code> or <code class='javascript'>globalInit</code> function before calling it. This is equivalent to using <code class='ruby'>respond_to?</code> in Ruby.</li>
+      <li>Note the function passed as the second parameter to replace: This is very similar to passing a block to <code class='ruby'>gsub</code> in Ruby.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>What about AJAX?</h5>
+    </div>
+
+    <ul class='notes'>
+      <li>All of this happens on DOM ready, so what about content we load after the fact using AJAX?</li>
+    </ul>
+
+    <div class='slide'>
+      <h6>Reading HTTP headers in JavaScript</h6>
+      <p><code class='javascript'>xhr.getResponseHeader("X-With-JavaScript");</code></p>
+    </div>
+
+    <ul class='notes'>
+      <li>We can use custom HTTP headers in the same was as we used the body class, and process them in the AJAX completion callback.</li>
+      <li>This can be put into a function similar to the DOM ready function mentioned above, and the common parts factored out.</li>
+    </ul>
+
+    <div class='slide'>
+      <h6>Defensive <code class='javascript'>init</code> functions</h6>
+      <pre><code class='javascript'>return {
+  init: function() {
+    jQuery('.my-widget<mark title="Use CSS selectors to exclude elements with the enhanced class">:not(.enhanced)</mark>')
+      .<mark title='Add the enhanced class to stop this element being enhanced again'>addClass('enhanced')</mark>
+      .each(function() {
+        …
+      });
+  }
+};</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>Sometimes an <code class='javascript'>init</code> function will be run twice: Once on DOM ready and again as the result of an AJAX callback.</li>
+      <li>We have to write defensive <code class='javascript'>init</code> functions so we don't enhance the same bit of markup twice and potentially break our pages, e.g. if the JavaScript adds some markup to the page we don't want it to be added twice.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>Rails to the rescue</h5>
+      <pre><code class='ruby'>def use_javascript_for(feature)
+  @javascript_features ||= []
+  @javascript_features &lt;&lt; feature.to_s.downcase
+  if request and request.xhr?
+    header = @javascript_features.uniq.join(' ')
+    response.headers['X-With-JavaScript'] = header
+  end
+end
+
+def javascript_feature_classes
+  @javascript_features ||= []
+  @javascript_features.uniq.map{ |f| "with-js-#{f}" }.join(" ")
+end</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>We've talked about adding classes to the body, and setting custom HTTP headers.</li>
+      <li>Why not roll all of this into some handy Rails helpers?</li>
+      <li>Ruby and JavaScript working together well.</li>
+      <li>Calling <code class='ruby'>use_javascript_for</code> in our views allows bits of HTML to request specific JavaScript enhancment.</li>
+      <li>Generating the HTTP headers and body classes in one place means we can load render a partial as part of a view or load it via XHR and the JavaScript will just work.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>CSS &amp; Rails</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>CSS is much simpler than JavaScript, so there isn't as much to say.</li>
+      <li>There are still some sensible conventions that can help us write maintainable code.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>Split things up</h3>
+      <ol>
+        <li>reset.css</li>
+        <li>elements.css</li>
+        <li>layout.css</li>
+        <li>…</li>
+      </ol>
+    </div>
+
+    <ul class='notes'>
+      <li>Small, carefully named files are easier to maintain.</li>
+      <li>Make use of CSS's specificity rules: you can override what went before by being more specific.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>Call things what they are</h3>
+    </div>
+
+    <ul class='notes'>
+      <li>Sharing terminology with designers is useful.</li>
+      <li>Using <code class='html'>class="product"</code> and styling a product to have rounded corners is much better than <code class='html'>class="rounded-box"</code>.</li>
+      <li>The Rails <a href='http://api.rubyonrails.org/classes/ActionView/Helpers/RecordTagHelper.html#method-i-content_tag_for'><code class='ruby'>content_tag_for</code></a> helper is good at doing this.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>The future's bright</h2>
+      <blockquote>
+        <p>
+          <tt>public</tt> is for designers, those messy kids, <tt>app</tt> is for the high-level programmer stuff that
+          we care about. That's not really a good way of going about it … and we've been forgetting about stylesheets and
+          JavaScript and ways we can optimise that for a long time. Let's not do that anymore.
+        </p>
+        <p class='citation'>
+          <cite>
+            <span class='vcard'><a href='http://www.loudthinking.com/' class='fn url'>David Heinemeier-Hansson</a></span>
+            speaking about Rails 3.1 at <span class='vevent'><a href='http://en.oreilly.com/rails2010' class='summary url'>RailsConf <time class='dtstart' datetime='2010-06-07'>2010</time></a></span>
+          </cite>
+        </p>
+      </blockquote>
+    </div>
+
+    <div class='notes'>
+      <h3>Benefits of putting JavaScript and CSS in the app</h3>
+      <ul>
+        <li>We can do additional processing on the applications, e.g. combining files to reduce the number of HTTP requests.</li>
+        <li>We can use Ruby helpers to generate some of the CSS or JavaScript, e.g. for CSS sprites, as mentioned in DHH's RubyConf presentation.</li>
+        <li>The front end code is closer to server-side configuration, like the current Rails environment.</li>
+      </ul>
+    </div>
+
+    <div class='slide'>
+      <h3>ERB in JavaScript</h3>
+      <p><code><span class='javascript'>link.html(</span><span class='ruby'>&lt;%= I18n.t('click_me').<mark title='JSON is a subset of JavaScript'>to_json</mark> %&gt;</span><span class='javascript'>);</span></code></p>
+    </div>
+
+    <ul class='notes'>
+      <li>We can pass data from our Rails controllers directly into our JavaScript or CSS.</li>
+      <li>When adding data to JavaScript we can use Rails' <code class='ruby'>to_json</code> method to handle quoting, escaping and object literals, because JSON is a subset of JavaScript.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>The future is now!</h3>
+    </div>
+
+    <ul class='notes'>
+      <li>Rails 3.1 may not be out yet, but a lot of the tools we need to manage are JavaScript and CSS better already exist.</li>
+      <li>Controllers, routes, helpers and ERB are all available now in Rails 2 and 3.0.</li>
+      <li>There are already some gems and plugins to help make this stuff easier.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>Rails CSS views</h4>
+      <p><a href='http://github.com/rhulse/rails-css-views'>github.com/rhulse/rails-css-views</a></p>
+    </div>
+
+    <ul class='notes'>
+      <li>Written by <span class='vcard'><a href='http://richardhulse.blogspot.com/' class='fn url'>Richard Hulse</a></span>.</li>
+      <li>Keep stylesheets in <tt>views/stylesheets</tt> and use ERB.</li>
+      <li>Supports multiple sets of CSS files.</li>
+      <li>Any object with a <code class='ruby'>transform</code> method can be used as a transformer.</li>
+      <li>Richard has also written a companion gem called “ruby-css-toolkit” providing minification.</li>
+      <li>Slightly awkward to set up cache busting, minification and template variable, but definitely on the right track.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>Shoebox</h4>
+      <p><a href='http://github.com/ddollar/shoebox'>github.com/ddollar/shoebox</a></p>
+    </div>
+
+    <ul class='notes'>
+      <li>Written by <span class='vcard'><a href='http://daviddollar.org' class='fn url'>David Dollar</a></span>.</li>
+      <li>Keep stylesheets and JavaScript files in <tt>app/styles</tt> and <tt>app/scripts</tt>.</li>
+      <li>Supports per-controller CSS and JavaScript, which may not always be a good thing.</li>
+      <li>Provides concatenation and minification but not ERB.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>Sprockets</h4>
+      <p>
+        <a href='http://getsprockets.org/'>getsprockets.org</a><br/>
+        and<br/>
+        <a href='http://github.com/sstephenson/sprockets'>github.com/sstephenson/sprockets</a>
+      </p>
+    </div>
+
+    <ul class='notes'>
+      <li>Written by <span class='vcard'><a href='http://sstephenson.us/' class='fn url'>Sam Stephenson</a></span> from <span class='vcard'><a href='http://37signals.com/' class='fn org url'>37signals</a></span></li>
+      <li>Combines and minifies multiple JavaScript files.</li>
+      <li>Uses specially formatted JavaScript comments (starting with <code class='javascript'>//=</code>) to specify dependencies on other JavaScript files and related static assets to be copied into the application.</li>
+      <li>Very useful for dependency management and sharing JavaScript code between applications.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>JavaScript features</h4>
+      <p><a href='http://github.com/georgebrock/javascript-features'>github.com/georgebrock/javascript-features</a></p>
+    </div>
+
+    <ul class='notes'>
+      <li>Written mostly be me, based on the way we do things at <span class='vcard'><a href='http://www.reevoo.com' class='fn org url'>Reevoo</a></span>.</li>
+      <li>Helps with client-side structuring (as outlined above) but doesn't support ERB… yet.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Any questions?</h2>
+      <p>
+        <address class='vcard'>
+          <span class='fn'>George Brocklehurst</span><br/>
+          <span class='role'>Developer</span> at <a href='http://www.reevoo.com' class='org'>Reevoo</a><br/>
+          “georgebrock” on <a href='http://twitter.com/georgebrock'>Twitter</a>, <a href='http://github.com/georgebrock'>GitHub</a>, etc.
+        </address>
+      </p>
+    </div>
+  </body>
+</html>
