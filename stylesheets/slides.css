@@ -26,6 +26,10 @@ mark {
   color: inherit;
 }
 
+span.path {
+  font-family: monospace;
+}
+
 a.run-slideshow {
   font-family: 'Arial', sans-serif;
   font-size: 0.8em;

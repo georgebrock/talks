@@ -48,7 +48,7 @@
 
     <dl class='notes'>
       <dt><dfn>Unobtrusive</dfn></dt>
-      <dd>JavaScript lives in <tt>.js</tt> files, not in <tt>.html</tt> files and the application still works if the <tt>.js</tt> files aren't loaded.</dd>
+      <dd>JavaScript lives in <span class='path'>.js</span> files, not in <span class='path'>.html</span> files and the application still works if the <span class='path'>.js</span> files aren't loaded.</dd>
       <dt><dfn>Framework agnostic</dfn></dt>
       <dd>We don't have to use Prototype, but can replace it with the best framework for this particular team or project.</dd>
     </dl>
@@ -81,7 +81,7 @@
     <ul class='notes'>
       <li>The link has a real <code class='html'>href</code>, so it will work without JavaScript.</li>
       <li>The Ruby code we write to generate the link is much closer to the way we would create a non-JavaScript link (helps us think in the right way).</li>
-      <li>All the JavaScript is contained in <tt>rails.js</tt> and can be easily tweaked or replaced entirely without monkey patching Rails helpers.</li>
+      <li>All the JavaScript is contained in <span class='path'>rails.js</span> and can be easily tweaked or replaced entirely without monkey patching Rails helpers.</li>
       <li>There's no mention of anything specific to Prototype, jQuery or any other JavaScript framework.</li>
       <li>Be careful though, you can still create links that make a <code>POST</code> request and only work with JavaScript.</li>
     </ul>
@@ -94,7 +94,7 @@
       <p>
         Although the helpers are now very good, they still only provide very basic functionality.
         As an app grows in size and complexity we are likely to want more JavaScript functionality than the Rails helpers can provide.
-        Usually we would create a new file in <tt>public/javascripts</tt> and just start hacking, but there are better ways.
+        Usually we would create a new file in <span class='path'>public/javascripts</span> and just start hacking, but there are better ways.
       </p>
       <p>
         So how should we structure our JavaScript?
@@ -357,7 +357,7 @@ end</code></pre>
       <h3>The future's bright</h3>
       <blockquote>
         <p>
-          <tt>public</tt> is for designers, those messy kids, <tt>app</tt> is for the high-level programmer stuff that
+          <span class='path'>public</span> is for designers, those messy kids, <span class='path'>app</span> is for the high-level programmer stuff that
           we care about. That's not really a good way of going about it … and we've been forgetting about stylesheets and
           JavaScript and ways we can optimise that for a long time. Let's not do that anymore.
         </p>
