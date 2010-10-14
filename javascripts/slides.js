@@ -54,9 +54,22 @@ var Slides = (function() {
     slide.show();
 
     slide.find(highlightSelector).removeClass('past present future').each(function(i) {
-      if(i < elNo) { $(this).addClass('past'); }
-      else if(i === elNo) { $(this).addClass('present'); }
-      else { $(this).addClass('future'); }
+      var el = $(this);
+      if(i < elNo) {
+        el
+          .addClass('past')
+          .find('.title').remove();
+      } else if(i === elNo) {
+        el.addClass('present');
+        var title = el.attr('title');
+        if(title) {
+          el.append( $('<span/>').addClass('title').text(title) );
+        }
+      } else {
+        el
+          .addClass('future')
+          .find('.title').remove();
+      }
     });
   }
 
