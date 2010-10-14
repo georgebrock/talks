@@ -165,6 +165,7 @@
     </div>
 
     <ul class='notes'>
+      <li>Because the purpose of the JavaScript is to enhance an HTML document, it makes sense to ask the document what it has that needs enhancing.</li>
       <li>Class names on the body keeps everything in one place.</li>
       <li>You could also use HTML5 <code class='html'>data-</code> attributes to be consistent with Rails 3.</li>
     </ul>
@@ -235,6 +236,8 @@
     </div>
 
     <ul class='notes'>
+      <li>When we load a fragment of HTML (e.g. a single Rails partial) via <abbr title='XML HTTP Request'>XHR</abbr>, there's no convenient container to attach class information to.</li>
+      <li>Fortunately we have access to other metadata about the request and response via the <code class='javascript'>XMLHTTPRequest</code> object, including the HTTP headers.</li>
       <li>We can use custom HTTP headers in the same was as we used the body class, and process them in the AJAX completion callback.</li>
       <li>This can be put into a function similar to the DOM ready function mentioned above, and the common parts factored out.</li>
     </ul>
@@ -256,32 +259,52 @@
     <ul class='notes'>
       <li>Sometimes an <code class='javascript'>init</code> function will be run twice: Once on DOM ready and again as the result of an AJAX callback.</li>
       <li>We have to write defensive <code class='javascript'>init</code> functions so we don't enhance the same bit of markup twice and potentially break our pages, e.g. if the JavaScript adds some markup to the page we don't want it to be added twice.</li>
+      <li>Adding a class to enhanced markup also gives us a convenient way of targeting CSS rules which are only appropriate when the JavaScript enhancements have been applied (it's good to keep style rules out of JavaScript, in the same way that it's good to keep JavaScript and CSS out of HTML).</li>
     </ul>
 
     <div class='slide'>
       <h5>Rails to the rescue</h5>
-      <pre><code class='ruby'>def use_javascript_for(feature)
-  @javascript_features ||= []
-  @javascript_features &lt;&lt; feature.to_s.downcase
-  if request and request.xhr?
-    header = @javascript_features.uniq.join(' ')
-    response.headers['X-With-JavaScript'] = header
-  end
-end
-
-def javascript_feature_classes
-  @javascript_features ||= []
-  @javascript_features.uniq.map{ |f| "with-js-#{f}" }.join(" ")
-end</code></pre>
     </div>
 
     <ul class='notes'>
       <li>We've talked about adding classes to the body, and setting custom HTTP headers.</li>
       <li>Why not roll all of this into some handy Rails helpers?</li>
-      <li>Ruby and JavaScript working together well.</li>
+    </ul>
+
+    <div class='slide'>
+      <h6>Requesting JavaScript</h6>
+      <pre><code class='ruby'>def use_javascript_for(feature)
+  @javascript_features ||= []
+  <span class='annotation' title='Add the feature to an array of enabled features'>@javascript_features &lt;&lt; feature.to_s.downcase</span>
+<span class='annotation' title='Set an HTTP header if it is an AJAX request'>  if request and request.xhr?
+    header = @javascript_features.uniq.join(' ')
+    response.headers['X-With-JavaScript'] = header
+  end</span>
+end</pre></code>
+
+      <p>For example:</p>
+      <pre><code><span class='html'>&lt;div class='gallery'&gt;
+  …
+&lt;/div&gt;</span>
+<span class='ruby'>&lt;% use_javascript_for 'image-gallery' %&gt;</span></code></pre>
+    </div>
+
+    <ul class='notes'>
       <li>Calling <code class='ruby'>use_javascript_for</code> in our views allows bits of HTML to request specific JavaScript enhancment.</li>
       <li>Generating the HTTP headers and body classes in one place means we can load render a partial as part of a view or load it via XHR and the JavaScript will just work.</li>
     </ul>
+
+    <div class='slide'>
+      <h6>Adding the classes to the body</h6>
+      <pre><code class='ruby'>def javascript_feature_classes
+  @javascript_features ||= []
+  @javascript_features.uniq.map{ |f| "with-js-#{f}" }.join(" ")
+end</code></pre>
+      <p>
+        For example:
+        <code><span class='html'>&lt;body class='</span><span class='ruby'>&lt;%= javascript_feature_classes %&gt;</span><span class='html'>'&gt;</span></code></pre>
+      </p>
+    </div>
 
     <div class='slide'>
       <h2>CSS &amp; Rails</h2>
@@ -290,6 +313,18 @@ end</code></pre>
     <ul class='notes'>
       <li>CSS is much simpler than JavaScript, so there isn't as much to say.</li>
       <li>There are still some sensible conventions that can help us write maintainable code.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>Call things what they are</h3>
+      <p>Good class names: <code class='inline html'>&lt;div class='product with-images'&gt;</code></p>
+      <p>Bad class names: <code class='inline html'>&lt;div class='rounded-corners'&gt;</code></p>
+    </div>
+
+    <ul class='notes'>
+      <li>Sharing terminology with designers is useful.</li>
+      <li>Using <code class='html'>class="product"</code> and styling a product to have rounded corners is much better than <code class='html'>class="rounded-box"</code>.</li>
+      <li>The Rails <a href='http://api.rubyonrails.org/classes/ActionView/Helpers/RecordTagHelper.html#method-i-content_tag_for'><code class='ruby'>content_tag_for</code></a> helper is good at doing this.</li>
     </ul>
 
     <div class='slide'>
@@ -308,17 +343,17 @@ end</code></pre>
     </ul>
 
     <div class='slide'>
-      <h3>Call things what they are</h3>
+      <h2>Serving front-end code from Rails</h2>
     </div>
 
     <ul class='notes'>
-      <li>Sharing terminology with designers is useful.</li>
-      <li>Using <code class='html'>class="product"</code> and styling a product to have rounded corners is much better than <code class='html'>class="rounded-box"</code>.</li>
-      <li>The Rails <a href='http://api.rubyonrails.org/classes/ActionView/Helpers/RecordTagHelper.html#method-i-content_tag_for'><code class='ruby'>content_tag_for</code></a> helper is good at doing this.</li>
+      <li>Breaking down our front-end code into small, manageable files is a good thing, but making lots of HTTP requests is inefficient.</li>
+      <li>Rails provides some basic functionality, e.g. <code class='ruby'>javascript_include_tag</code> and <code class='ruby'>stylesheet_link_tag</code>. Both of these can combine files via <code class='ruby'>:cache =&gt; true</code>.</li>
+      <li>What if we want to do more than just combine our CSS and JavaScript files?</li>
     </ul>
 
     <div class='slide'>
-      <h2>The future's bright</h2>
+      <h3>The future's bright</h3>
       <blockquote>
         <p>
           <tt>public</tt> is for designers, those messy kids, <tt>app</tt> is for the high-level programmer stuff that
@@ -337,9 +372,9 @@ end</code></pre>
     <div class='notes'>
       <h3>Benefits of putting JavaScript and CSS in the app</h3>
       <ul>
-        <li>We can do additional processing on the applications, e.g. combining files to reduce the number of HTTP requests.</li>
-        <li>We can use Ruby helpers to generate some of the CSS or JavaScript, e.g. for CSS sprites, as mentioned in DHH's RubyConf presentation.</li>
-        <li>The front end code is closer to server-side configuration, like the current Rails environment.</li>
+        <li>We can do additional processing on the assets, e.g. minification.</li>
+        <li>We can use ERB and helper methods to generate some of the CSS or JavaScript, e.g. for CSS sprites, as mentioned in DHH's RubyConf presentation.</li>
+        <li>The front end code can easily access server-side configuration, like the routes or the current Rails environment.</li>
       </ul>
     </div>
 
@@ -363,7 +398,7 @@ end</code></pre>
 
     <ul class='notes'>
       <li>Rails 3.1 may not be out yet, but a lot of the tools we need to manage are JavaScript and CSS better already exist.</li>
-      <li>Controllers, routes, helpers and ERB are all available now in Rails 2 and 3.0.</li>
+      <li>Controllers, routes, helpers, ERB and <code class='ruby'>to_json</code> are all available now in Rails 2 and 3.0.</li>
       <li>There are already some gems and plugins to help make this stuff easier.</li>
     </ul>
 
