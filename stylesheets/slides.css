@@ -13,6 +13,15 @@ a:active {
   text-decoration: underline;
 }
 
+abbr {
+  border-bottom: 1px solid #999;
+  cursor: help;
+}
+
+dfn {
+  font-style: italic;
+}
+
 a.run-slideshow {
   font-family: 'Arial', sans-serif;
   font-size: 0.8em;
