@@ -3,7 +3,7 @@
   <head>
     <meta charset='utf-8' />
     <title>Maintainable front-end code in Ruby on Rails applications</title>
-    <link rel='stylesheet' type='text/css' charset='utf-8' href='stylesheets/slides.css' />
+    <link rel='stylesheet' href='stylesheets/slides.css' />
     <script src='javascripts/jquery.min.js'></script>
     <script src='javascripts/slides.js'></script>
   </head>
@@ -64,7 +64,7 @@
     </div>
 
     <ul class='notes'>
-      <li>The link has a fake <code class='html''>href</code>, so it won't work without JavaScript.</li>
+      <li>The link has a fake <code class='html'>href</code>, so it won't work without JavaScript.</li>
       <li>The JavaScript is inserted directly into the HTML, so to customise it we would have to modify the Rails helper that generates it.</li>
       <li>The JavaScript uses the <code class='javascript'>Ajax.Request</code> method, which is specific to the Prototype library.</li>
     </ul>
@@ -145,7 +145,7 @@
           </li>
         </ul>
       </li>
-      <li>If we write all our JavaScript as methods on the <code class='javascript''>window</code> object, we'll end up in a mess.</li>
+      <li>If we write all our JavaScript as methods on the <code class='javascript'>window</code> object, we'll end up in a mess.</li>
       <li>Using <em>objects</em> to group related code and <em>immediately called functions</em> to create a private variable scope helps avoid conflicts.</li>
     </ul>
 
@@ -249,7 +249,10 @@
     jQuery('.gallery<ins title="Use CSS selectors to exclude elements with the enhanced class">:not(.enhanced)</ins>')<ins title='Add the enhanced class to stop this element being enhanced again'>
       .addClass('enhanced')</ins>
       .each(function() {
-        var moreLink = jQuery('&lt;a&gt;&lt;/a&gt;').text('More').click(loadMore);
+        var moreLink = jQuery('&lt;a&gt;&lt;/a&gt;')
+                         .text('More')
+                         .click(loadMore);
+
         jQuery(this).append(moreLink);
       });
   }
@@ -274,18 +277,16 @@
     <div class='slide'>
       <h6>Requesting JavaScript</h6>
       <pre><code class='ruby'>def use_javascript_for(feature)
-  @javascript_features ||= []
-  <span class='annotation' title='Add the feature to an array of enabled features'>@javascript_features &lt;&lt; feature.to_s.downcase</span>
+  @js_features ||= []
+  <span class='annotation' title='Add the feature to an array of enabled features'>@js_features &lt;&lt; feature.to_s.downcase</span>
 <span class='annotation' title='Set an HTTP header if it is an AJAX request'>  if request and request.xhr?
-    header = @javascript_features.uniq.join(' ')
+    header = @js_features.uniq.join(' ')
     response.headers['X-With-JavaScript'] = header
   end</span>
-end</pre></code>
+end</code></pre>
 
       <p>For example:</p>
-      <pre><code><span class='html'>&lt;div class='gallery'&gt;
-  …
-&lt;/div&gt;</span>
+      <pre><code><span class='html'>&lt;div class='gallery'&gt; … &lt;/div&gt;</span>
 <span class='ruby'>&lt;% use_javascript_for 'image-gallery' %&gt;</span></code></pre>
     </div>
 
@@ -297,12 +298,12 @@ end</pre></code>
     <div class='slide'>
       <h6>Adding the classes to the body</h6>
       <pre><code class='ruby'>def javascript_feature_classes
-  @javascript_features ||= []
-  @javascript_features.uniq.map{ |f| "with-js-#{f}" }.join(" ")
+  @js_features ||= []
+  @js_features.uniq.map{ |f| "with-js-#{f}" }.join(" ")
 end</code></pre>
       <p>
         For example:
-        <code><span class='html'>&lt;body class='</span><span class='ruby'>&lt;%= javascript_feature_classes %&gt;</span><span class='html'>'&gt;</span></code></pre>
+        <code><span class='html'>&lt;body class='</span><span class='ruby'>&lt;%= javascript_feature_classes %&gt;</span><span class='html'>'&gt;</span></code>
       </p>
     </div>
 
@@ -432,7 +433,7 @@ end</code></pre>
       <h4>JavaScript features</h4>
       <p><a class='linky' href='http://github.com/georgebrock/javascript-features'>github.com/georgebrock/javascript-features</a></p>
       <ul>
-        <li class='notes'>Written mostly be me, based on the way we do things at <span class='vcard'><a href='http://www.reevoo.com' class='fn org url'>Reevoo</a></span>.</li>
+        <li class='notes'>Written mostly by me, based on the way we do things at <span class='vcard'><a href='http://www.reevoo.com' class='fn org url'>Reevoo</a></span>.</li>
         <li>Helps with client-side structuring.</li>
         <li>Provides some Rails helpers.</li>
         <li>Concatenates and minifies scripts.</li>
@@ -443,13 +444,11 @@ end</code></pre>
 
     <div class='slide'>
       <h2>Any questions?</h2>
-      <p>
-        <address class='vcard'>
-          <a class='url' href='http://georgebrock.com'><strong class='fn'>George Brocklehurst</strong></a><br/>
-          <span class='role'>Developer</span> at <a href='http://www.reevoo.com' class='org url'>Reevoo</a><br/>
-          “georgebrock” on <a class='url' href='http://twitter.com/georgebrock'>Twitter</a>, <a class='url' href='http://github.com/georgebrock'>GitHub</a>, etc.
-        </address>
-      </p>
+      <address class='vcard'>
+        <a class='url' href='http://georgebrock.com'><strong class='fn'>George Brocklehurst</strong></a><br/>
+        <span class='role'>Developer</span> at <a href='http://www.reevoo.com' class='org url'>Reevoo</a><br/>
+        “georgebrock” on <a class='url' href='http://twitter.com/georgebrock'>Twitter</a>, <a class='url' href='http://github.com/georgebrock'>GitHub</a>, etc.
+      </address>
     </div>
   </body>
 </html>
