@@ -368,43 +368,42 @@ end</code></pre>
 
     <div class='slide'>
       <h4>Rails CSS views</h4>
-      <p><a href='http://github.com/rhulse/rails-css-views'>github.com/rhulse/rails-css-views</a></p>
+      <p><a class='linky' href='http://github.com/rhulse/rails-css-views'>github.com/rhulse/rails-css-views</a></p>
+      <ul>
+        <li class='notes'>Written by <span class='vcard'><a href='http://richardhulse.blogspot.com/' class='fn url'>Richard Hulse</a></span>.</li>
+        <li>Supports ERB in CSS.</li>
+        <li>Concatenates multiple CSS files.</li>
+        <li>Any object with a <code class='inline ruby'>transform</code> method can be used as a transformer, e.g. for minification.</li>
+      </ul>
     </div>
-
-    <ul class='notes'>
-      <li>Written by <span class='vcard'><a href='http://richardhulse.blogspot.com/' class='fn url'>Richard Hulse</a></span>.</li>
-      <li>Keep stylesheets in <tt>views/stylesheets</tt> and use ERB.</li>
-      <li>Supports multiple sets of CSS files.</li>
-      <li>Any object with a <code class='ruby'>transform</code> method can be used as a transformer.</li>
-      <li>Richard has also written a companion gem called “ruby-css-toolkit” providing minification.</li>
-      <li>Slightly awkward to set up cache busting, minification and template variable, but definitely on the right track.</li>
-    </ul>
 
     <div class='slide'>
       <h4>Sprockets</h4>
       <p>
-        <a href='http://getsprockets.org/'>getsprockets.org</a><br/>
-        and<br/>
-        <a href='http://github.com/sstephenson/sprockets'>github.com/sstephenson/sprockets</a>
+        <a class='linky' href='http://getsprockets.org/'>getsprockets.org</a> &amp;
+        <a class='linky' href='http://github.com/sstephenson/sprockets'>github.com/sstephenson/sprockets</a>
       </p>
+      <ul>
+        <li class='notes'>Written by <span class='vcard'><a href='http://sstephenson.us/' class='fn url'>Sam Stephenson</a></span> from <span class='vcard'><a href='http://37signals.com/' class='fn org url'>37signals</a></span></li>
+        <li>Concatenates and minifies scripts.</li>
+        <li>Manages dependancies using specially formatted comments: <code class='javascript'>//= require &lt;jquery&gt;</code></li>
+        <li>Supports bundling other assets (images, stylesheets, etc.) with scripts so you can easily share code between apps.</li>
+        <li>Simple string replacement, but no ERB.</li>
+      </ul>
     </div>
-
-    <ul class='notes'>
-      <li>Written by <span class='vcard'><a href='http://sstephenson.us/' class='fn url'>Sam Stephenson</a></span> from <span class='vcard'><a href='http://37signals.com/' class='fn org url'>37signals</a></span></li>
-      <li>Combines and minifies multiple JavaScript files.</li>
-      <li>Uses specially formatted JavaScript comments (starting with <code class='javascript'>//=</code>) to specify dependencies on other JavaScript files and related static assets to be copied into the application.</li>
-      <li>Very useful for dependency management and sharing JavaScript code between applications.</li>
-    </ul>
 
     <div class='slide'>
       <h4>JavaScript features</h4>
-      <p><a href='http://github.com/georgebrock/javascript-features'>github.com/georgebrock/javascript-features</a></p>
+      <p><a class='linky' href='http://github.com/georgebrock/javascript-features'>github.com/georgebrock/javascript-features</a></p>
+      <ul>
+        <li class='notes'>Written mostly be me, based on the way we do things at <span class='vcard'><a href='http://www.reevoo.com' class='fn org url'>Reevoo</a></span>.</li>
+        <li>Helps with client-side structuring.</li>
+        <li>Provides some Rails helpers.</li>
+        <li>Concatenates and minifies scripts.</li>
+        <li>No ERB support… yet.</li>
+        <li>Basic testing support.</li>
+      </ul>
     </div>
-
-    <ul class='notes'>
-      <li>Written mostly be me, based on the way we do things at <span class='vcard'><a href='http://www.reevoo.com' class='fn org url'>Reevoo</a></span>.</li>
-      <li>Helps with client-side structuring (as outlined above) but doesn't support ERB… yet.</li>
-    </ul>
 
     <div class='slide'>
       <h2>Any questions?</h2>
