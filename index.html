@@ -193,6 +193,7 @@
     <div class='slide'>
       <h5>A little bit of glue…</h5>
       <pre><code class='javascript'>var key, className;
+
 for(key in MyApp) {
   if(MyApp.hasOwnProperty(key)) {
 
@@ -243,10 +244,11 @@ for(key in MyApp) {
       <h6>Defensive <code class='javascript'>init</code> functions</h6>
       <pre><code class='javascript'>return {
   init: function() {
-    jQuery('.my-widget<mark title="Use CSS selectors to exclude elements with the enhanced class">:not(.enhanced)</mark>')
-      .<mark title='Add the enhanced class to stop this element being enhanced again'>addClass('enhanced')</mark>
+    jQuery('.gallery<ins title="Use CSS selectors to exclude elements with the enhanced class">:not(.enhanced)</ins>')<ins title='Add the enhanced class to stop this element being enhanced again'>
+      .addClass('enhanced')</ins>
       .each(function() {
-        …
+        var moreLink = $('&lt;a&gt;&lt;/a&gt;').text('More').click(loadMore);
+        $(this).append(moreLink);
       });
   }
 };</code></pre>
