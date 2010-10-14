@@ -42,7 +42,7 @@ a.run-slideshow {
   position: relative;
   padding: 20px;
   margin: 10px 0 20px 10px;
-  -webkit-box-shadow: rgba(0,0,0,0.25) -5px 5px 20px;
+  -webkit-box-shadow: rgba(0,0,0,0.25) 0 5px 20px;
   border: 1px solid #999;
   width: 640px;
 }
@@ -50,10 +50,17 @@ a.run-slideshow {
   color: #666;
   margin-left: 30px;
 }
+.slide .notes {
+  margin-left: 0;
+}
 .slide code {
   display: block;
   text-align: left;
   margin: 10px 0;
+}
+.slide code.inline {
+  display: inline;
+  margin: 0;
 }
 .slide h1,
 .slide h2,
@@ -139,6 +146,13 @@ body.slideshow .slide h4,
 body.slideshow .slide h5,
 body.slideshow .slide h6 {
   font-size: 60px;
+}
+
+body.slideshow a:not(.linky) {
+  color: #000;
+}
+body.slideshow a.linky {
+  text-decoration: underline;
 }
 
 body.slideshow ins {
