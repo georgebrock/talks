@@ -43,8 +43,6 @@ var Slides = (function() {
             default: return true;
           }
         });
-
-      runLink.trigger('click');
     }
   };
 }());
