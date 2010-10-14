@@ -79,12 +79,14 @@ var Slides = (function() {
       $('body')
         .append(runLink)
         .keydown(function(event) {
+          switch(event.keyCode) {
+            case 49: start(); return false; // 1
+          }
           if(!$('body').hasClass('slideshow')){ return true; }
           switch(event.keyCode) {
             case 39: next(); return false; // right
             case 37: previous(); return false; // left
             case 27: stop(); return false; // escape
-            case 49: show(0); return false; // 1
             default: return true;
           }
         });
