@@ -204,7 +204,7 @@
 
     // Specific initialisation
 <span class='annotation' title='Run the initialisation code if this page has requested'>    if(typeof MyApp[key].init === "function" &amp;&amp;
-       $('body').hasClass(classNameFromKey(key))) {
+       jQuery('body').hasClass(classNameFromKey(key))) {
       MyApp[key].init(context);
     }</span>
   }
@@ -251,8 +251,8 @@
     jQuery('.gallery<ins title="Use CSS selectors to exclude elements with the enhanced class">:not(.enhanced)</ins>')<ins title='Add the enhanced class to stop this element being enhanced again'>
       .addClass('enhanced')</ins>
       .each(function() {
-        var moreLink = $('&lt;a&gt;&lt;/a&gt;').text('More').click(loadMore);
-        $(this).append(moreLink);
+        var moreLink = jQuery('&lt;a&gt;&lt;/a&gt;').text('More').click(loadMore);
+        jQuery(this).append(moreLink);
       });
   }
 };</code></pre>
@@ -351,9 +351,9 @@ end</code></pre>
     <div class='slide'>
       <h3>ERB in JavaScript</h3>
       <p>
-        <code class='javascript'>$('&lt;a&gt;&lt;/a&gt;').text('More');</code>
+        <code class='javascript'>jQuery('&lt;a&gt;&lt;/a&gt;').text('More');</code>
         could be rewritten as
-        <code><span class='javascript'>$('&lt;a&gt;&lt;/a&gt;').text(</span><span class='ruby'>&lt;%= I18n.t('more').<mark title='JSON is a subset of JavaScript'>to_json</mark> %&gt;</span><span class='javascript'>);</span></code>
+        <code><span class='javascript'>jQuery('&lt;a&gt;&lt;/a&gt;').text(</span><span class='ruby'>&lt;%= I18n.t('more').<mark title='JSON is a subset of JavaScript'>to_json</mark> %&gt;</span><span class='javascript'>);</span></code>
       </p>
     </div>
 
