@@ -194,25 +194,29 @@
       <h5>A little bit of glue…</h5>
       <pre><code class='javascript'>var key, className;
 
-for(key in MyApp) {
-  if(MyApp.hasOwnProperty(key)) {
+<span class='annotation' title='Iterate over the features defined in MyApp'>for(key in MyApp) {
+  if(MyApp.hasOwnProperty(key)) {</span>
 
     // Global initialisation
-    if(typeof MyApp[key].globalInit === "function") {
+<span class='annotation' title='Run global initialisation code'>    if(typeof MyApp[key].globalInit === "function") {
       MyApp[key].global_init();
-    }
+    }</span>
 
     // Specific initialisation
-    className = 'with-js-' + key.replace(/[a-z][A-Z]/g, function(str) {
-      return str[0] + '-' + str[1].toLowerCase();
-    });
-
-    if(typeof MyApp[key].init === "function" &amp;&amp;
-       $('body').hasClass(className)) {
+<span class='annotation' title='Run the initialisation code if this page has requested'>    if(typeof MyApp[key].init === "function" &amp;&amp;
+       $('body').hasClass(classNameFromKey(key))) {
       MyApp[key].init(context);
-    }
+    }</span>
   }
 }</code></pre>
+    </div>
+
+    <div class='notes'>
+      <pre><code class='javascript'>var classNameFromKey = function(key) {
+  return 'with-js-' + key.replace(/[a-z][A-Z]/g, function(str) {
+    return str[0] + '-' + str[1].toLowerCase();
+  });
+};</code></pre>
     </div>
 
     <ul class='notes'>
