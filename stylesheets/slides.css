@@ -59,7 +59,8 @@ a.run-slideshow {
   width:                  640px;
 }
 .slide .notes {
-  margin-left:            0;
+  margin:                 0;
+  padding:                0;
 }
 .slide code {
   display:                block;
