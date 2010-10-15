@@ -170,7 +170,6 @@ body.slideshow .slide ins.past {
 }
 body.slideshow .slide ins.present {
   display:                inline;
-  background:             yellow;
 }
 body.slideshow .slide ins.future {
   display:                none;
@@ -179,12 +178,19 @@ body.slideshow .slide ins.future {
 body.slideshow .slide mark.past,
 body.slideshow .slide mark.future,
 body.slideshow .slide span.annotation.past,
-body.slideshow .slide span.annotation.future {
+body.slideshow .slide span.annotation.future,
+body.slideshow .slide ins.past,
+body.slideshow .slide ins.future {
   background:             none;
 }
 body.slideshow .slide mark.present,
-body.slideshow .slide span.annotation.present {
-  background:             yellow;
+body.slideshow .slide span.annotation.present,
+body.slideshow .slide ins.present {
+  background:             #d00;
+  color:                  #fff;
+  padding:                5px;
+  margin:                 -5px;
+  border-radius:          5px;
 }
 
 body.slideshow .slide .present .title {
@@ -192,6 +198,7 @@ body.slideshow .slide .present .title {
   display:                block;
   position:               absolute;
   bottom:                 0;
+  left:                   0;
   color:                  #fff;
   background:             rgba(0,0,0,0.9);
   text-align:             center;
