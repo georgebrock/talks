@@ -154,7 +154,7 @@
     </div>
 
     <ul class='notes'>
-      <li>Lots of JavaScript files means lots of HTTP requests, which is slow.</li>
+      <li>Lots of JavaScript files means lots of <abbr title='Hypertext Transfer Protocol'>HTTP</abbr> requests, which is slow.</li>
       <li>Running lots of unneeded JavaScript setup on every page can also be slow, e.g. why initialise inline form validation on a page with no forms?</li>
       <li>It would be good if we can always load all of the JavaScript to reduce HTTP requests and benefit from cachine without always running all of it.</li>
     </ul>
@@ -374,7 +374,7 @@ end</code></pre>
       <h3>Benefits of putting JavaScript and CSS in the app</h3>
       <ul>
         <li>We can do additional processing on the assets, e.g. minification.</li>
-        <li>We can use ERB and helper methods to generate some of the CSS or JavaScript, e.g. for CSS sprites, as mentioned in DHH's RubyConf presentation.</li>
+        <li>We can use <abbr title='Embedded Ruby'>ERB</abbr> and helper methods to generate some of the CSS or JavaScript, e.g. for CSS sprites, as mentioned in DHH's RubyConf presentation.</li>
         <li>The front end code can easily access server-side configuration, like the routes or the current Rails environment.</li>
       </ul>
     </div>
