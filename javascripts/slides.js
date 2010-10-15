@@ -88,14 +88,26 @@ var Slides = (function() {
         .append(runLink)
         .keydown(function(event) {
           switch(event.keyCode) {
-            case 49: start(); return false; // 1
+            case 49: // 1
+              start();
+              return false;
           }
           if(!$('body').hasClass('slideshow')){ return true; }
           switch(event.keyCode) {
-            case 39: next(); return false; // right
-            case 37: previous(); return false; // left
-            case 27: stop(); return false; // escape
-            default: return true;
+            case 39: // right
+            case 40: // down
+            case 32: // space
+              next();
+              return false;
+            case 37: // left
+            case 38: // up
+              previous();
+              return false;
+            case 27: // escape
+              stop();
+              return false;
+            default:
+              return true;
           }
         });
     }
