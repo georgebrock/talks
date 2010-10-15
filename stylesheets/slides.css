@@ -45,14 +45,16 @@ a.run-slideshow {
 .slide {
   position:               relative;
   padding:                20px;
-  margin:                 10px 0 20px 10px;
+  margin:                 20px auto 20px;
   -webkit-box-shadow:     rgba(0,0,0,0.25) 0 5px 20px;
   border:                 1px solid #999;
   width:                  640px;
 }
 .notes {
   color:                  #666;
-  margin-left:            30px;
+  margin:                 0 auto;
+  padding:                0 20px;
+  width:                  640px;
 }
 .slide .notes {
   margin-left:            0;
