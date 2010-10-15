@@ -156,7 +156,8 @@
     <ul class='notes'>
       <li>Lots of JavaScript files means lots of <abbr title='Hypertext Transfer Protocol'>HTTP</abbr> requests, which is slow.</li>
       <li>Running lots of unneeded JavaScript setup on every page can also be slow, e.g. why initialise inline form validation on a page with no forms?</li>
-      <li>It would be good if we can always load all of the JavaScript to reduce HTTP requests and benefit from caching without always running all of it.</li>
+      <li>It is good to serve all of the JavaScript as a single file to reduce HTTP requests and benefit from caching, but be selective about which scripts we run.</li>
+      <li>This doesn't mean we should <em>write</em> the JavaScript in one big file (more on this later).</li>
     </ul>
 
     <div class='slide'>
