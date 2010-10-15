@@ -228,6 +228,8 @@
 
     <ul class='notes'>
       <li>All of this happens on DOM ready, so what about content we load after the fact using AJAX?</li>
+      <li>When we load a fragment of HTML (e.g. a single Rails partial) via <abbr title='XML HTTP Request'>XHR</abbr>, there's no convenient container to attach class information to.</li>
+      <li>Fortunately we have access to other metadata about the request and response via the <code class='javascript'>XMLHTTPRequest</code> object, including the HTTP headers.</li>
     </ul>
 
     <div class='slide'>
@@ -236,8 +238,6 @@
     </div>
 
     <ul class='notes'>
-      <li>When we load a fragment of HTML (e.g. a single Rails partial) via <abbr title='XML HTTP Request'>XHR</abbr>, there's no convenient container to attach class information to.</li>
-      <li>Fortunately we have access to other metadata about the request and response via the <code class='javascript'>XMLHTTPRequest</code> object, including the HTTP headers.</li>
       <li>We can use custom HTTP headers in the same was as we used the body class, and process them in the AJAX completion callback.</li>
       <li>This can be put into a function similar to the DOM ready function mentioned above, and the common parts factored out.</li>
     </ul>
