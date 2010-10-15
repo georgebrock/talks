@@ -12,6 +12,10 @@ var Slides = (function() {
 
   var stop = function() {
     $('body').removeClass('slideshow');
+    $(highlightSelector)
+      .removeClass('past present future')
+      .find('.title').remove();
+    $('.slide').removeAttr('style');
     runLink.show();
     $('.slide, .notes').show();
   }
