@@ -109,6 +109,7 @@ a.run-slideshow {
 .slide address {
   text-align:             center;
   font-style:             normal;
+  margin-top:             20px;
 }
 .todo {
   color:                  #cf2332;
