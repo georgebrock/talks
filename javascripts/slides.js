@@ -7,6 +7,7 @@ var Slides = (function() {
     $('.slide, .notes').hide();
     runLink.hide();
     $('body').addClass('slideshow');
+    currentSlide = -1;
     show(0);
   };
 
