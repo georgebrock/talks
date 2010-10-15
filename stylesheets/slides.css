@@ -135,7 +135,7 @@ body.slideshow .slide {
   margin:                 0;
   -webkit-box-shadow:     none;
   margin:                 0 auto;
-  padding:                60px 0;
+  padding:                0 0 60px 0;
   width:                  1024px;
 }
 body.slideshow .slide code {

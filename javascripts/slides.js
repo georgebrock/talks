@@ -47,10 +47,15 @@ var Slides = (function() {
   }
 
   var show = function(slideNo, elNo) {
-    currentSlide = slideNo;
-    currentElement = elNo;
     $('.slide').hide();
-    var slide = $('.slide:eq(' + currentSlide + ')');
+    var slide = $('.slide:eq(' + slideNo + ')');
+
+    if(slideNo !== currentSlide) {
+      slide.css({'padding-top': 0});
+      var heightDiff = $(window).height() - slide.innerHeight();
+      slide.css({'padding-top': (heightDiff / 2) + 'px'});
+    }
+
     slide.show();
 
     slide.find(highlightSelector).removeClass('past present future').each(function(i) {
@@ -71,6 +76,9 @@ var Slides = (function() {
           .find('.title').remove();
       }
     });
+
+    currentSlide = slideNo;
+    currentElement = elNo;
   }
 
   return {
