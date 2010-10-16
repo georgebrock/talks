@@ -116,7 +116,7 @@
       <pre><code class='javascript'><span class='annotation' title='Everything contained in one object'>MyApp.imageGallery</span> = (<span class='annotation' title='A function creates a new variable scope'>function</span>() {
 
 <span class='annotation' title='Use closure to create private variables and methods'>  var imagesURL = 'http://example.org/images/';
-  var loadImages = function() { … };</span>
+  var loadMoreImages = function() { … };</span>
 
 <span class='annotation' title='Return an object defining the public interface'>  return {
     showLightbox: function() { … }
@@ -252,7 +252,7 @@
       .each(function() {
         var moreLink = jQuery('&lt;a&gt;&lt;/a&gt;')
                          .text('More')
-                         .click(loadMore);
+                         .click(loadMoreImages);
 
         jQuery(this).append(moreLink);
       });
