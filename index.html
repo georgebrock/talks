@@ -244,6 +244,21 @@
     </ul>
 
     <div class='slide'>
+      <h6>Calling <code class='javascript'>init</code> twice?</h6>
+
+      <pre><code class='html'>&lt;div class='gallery'&gt;
+  …
+  <ins title='Added by JavaScript on DOM ready'>&lt;a href='…'&gt;More&lt;/a&gt;</ins>
+  <ins title='Added after an AJAX call'>&lt;a href='…'&gt;More&lt;/a&gt;</ins>
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>Some of our <code class='javascript'>init</code> functions will add elements to the <abbr title='Document Object Model'>DOM</abbr>.</li>
+      <li>If we call them once on DOM ready, and again after an AJAX call has completed we can end up adding duplicate content to the page.</li>
+    </ul>
+
+    <div class='slide'>
       <h6>Defensive <code class='javascript'>init</code> functions</h6>
       <pre><code class='javascript'>return {
   init: function() {
