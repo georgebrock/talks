@@ -268,6 +268,7 @@
     <ul class='notes'>
       <li>We have to write defensive <code class='javascript'>init</code> functions so we don't enhance the same bit of markup twice and potentially break our pages, e.g. if the JavaScript adds some markup to the page we don't want it to be added twice.</li>
       <li>Adding a class to enhanced markup also gives us a convenient way of targeting CSS rules which are only appropriate when the JavaScript enhancements have been applied (it's good to keep style rules out of JavaScript, in the same way that it's good to keep JavaScript and CSS out of HTML).</li>
+      <li><ins>Note that if you always use the same class name (e.g. <code>enhanced</code>) you can't initialise two features on the same element (thanks to the person who pointed this out in the Q&amp;A at RubyConfUA).</ins></li>
     </ul>
 
     <div class='slide'>
