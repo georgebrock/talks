@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Structured JavaScript</title>
+    <link rel='stylesheet' href='../stylesheets/slides.css' />
+    <script src='../javascripts/jquery.min.js'></script>
+    <script src='../javascripts/slides.js'></script>
+  </head>
+  <body>
+
+    <div class='slide'>
+      <h1>Structured JavaScript</h1>
+      <p>
+        by <strong>George Brocklehurst</strong>
+        (@georgebrock)
+      </p>
+      <p class='notes'>
+        Presented at <strong class='vevent'><a href='http://eight.barcamplondon.org/' class='summary url'>BarCampLondon 8</a>,  <time class='dtstart' datetime='2010-11-13'>November 2010</time></a></strong>
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h4>Structured JavaScript</h4>
+      <pre><code class='javascript'><span class='annotation' title='Everything contained in one object'>MyApp.imageGallery</span> = (<span class='annotation' title='A function creates a new variable scope'>function</span>() {
+
+<span class='annotation' title='Use closure to create private variables and methods'>  var imagesURL = 'http://example.org/images/';
+  var loadMoreImages = function() { … };</span>
+
+<span class='annotation' title='Return an object defining the public interface'>  return {
+    showLightbox: function() { … }
+  };</span>
+
+}());</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>
+        JavaScript is far from perfect:
+        <ul>
+          <li>By default everything is in a global namespace (in the case of the browser, this is the <code class='javascript'>window</code> object).</li>
+          <li>The privacy and object models are very different from other languages (not really a problem, but it can make some things feel unfamiliar).</li>
+          <li>There is no block level scoping, so the only way to get a new variable scope is by defining a function.</li>
+          <li>
+            <a href='http://www.amazon.com/exec/obidos/ASIN/0596517742/wrrrldwideweb'>“JavaScript: The Good Parts”</a>
+            by <span class='vcard'><a href='http://www.crockford.com/' class='fn url'>Douglas Crockford</a></span>
+            is a good summary of the good parts of the language and what you should avoid.
+          </li>
+        </ul>
+      </li>
+      <li>If we write all our JavaScript as methods on the <code class='javascript'>window</code> object, we'll end up in a mess.</li>
+      <li>Using <em>objects</em> to group related code and <em>immediately called functions</em> to create a private variable scope helps avoid conflicts.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>Initialising the right scripts</h4>
+    </div>
+
+    <ul class='notes'>
+      <li>Lots of JavaScript files means lots of <abbr title='Hypertext Transfer Protocol'>HTTP</abbr> requests, which is slow.</li>
+      <li>Running lots of unneeded JavaScript setup on every page can also be slow, e.g. why initialise inline form validation on a page with no forms?</li>
+      <li>It is good to serve all of the JavaScript as a single file to reduce HTTP requests and benefit from caching, but be selective about which scripts we run.</li>
+      <li>This doesn't mean we should <em>write</em> the JavaScript in one big file (more on this later).</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>Ask the HTML what it needs</h5>
+      <p><code class='html'>&lt;body class='<mark title='A common prefix for the JavaScript to look for'>with-js</mark>-<mark title='The name of the feature we want to enable'>image-gallery</mark>'&gt;</code></p>
+    </div>
+
+    <ul class='notes'>
+      <li>Because the purpose of the JavaScript is to enhance an HTML document, it makes sense to ask the document what it has that needs enhancing.</li>
+      <li>Class names on the body keeps everything in one place.</li>
+      <li>You could also use HTML5 <code class='html'>data-</code> attributes.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>Common JavaScript API</h5>
+      <pre><code class='javascript'>MyApp.imageGallery = (function() {
+  …
+
+  return {
+    <mark title='Setup code to run on every page'>globalInit</mark>:   function() { … },
+    <mark title='Setup code to run only when it is needed'>init</mark>:         function() { … }
+  };
+
+}());</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>We've already talked about splitting our JavaScript into objects, so it makes sense to give those objects a consistent interface.</li>
+      <li>We use <code class='javascript'>init</code> for code that needs to be run on pages that specifically require this feature, and <code class='javascript'>globalInit</code> for code that needs to be run on all pages.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>A little bit of glue…</h5>
+      <pre><code class='javascript'>var key, className;
+
+<span class='annotation' title='Iterate over the features defined in MyApp'>for(key in MyApp) {
+  if(MyApp.hasOwnProperty(key)) {</span>
+
+<span class='annotation' title='Run global initialisation code'>    if(typeof MyApp[key].globalInit === "function") {
+      MyApp[key].globalInit();
+    }</span>
+
+<span class='annotation' title='Run the initialisation code if this page has requested'>    if(typeof MyApp[key].init === "function" &amp;&amp;
+      jQuery('body').hasClass(classNameFromKey(key))) {
+      MyApp[key].init();
+    }</span>
+  }
+}</code></pre>
+    </div>
+
+    <div class='notes'>
+      <pre><code class='javascript'>var classNameFromKey = function(key) {
+  return 'with-js-' + key.replace(/[a-z][A-Z]/g, function(str) {
+    return str[0] + '-' + str[1].toLowerCase();
+  });
+};</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>Iterate over all of the objects in <code class='javascript'>MyApp</code>.</li>
+      <li>We need to use <code class='javascript'>hasOwnProperty</code> to make sure the property hasn't come from the object's prototype.</li>
+      <li>We're checking that each object has an <code class='javascript'>init</code> or <code class='javascript'>globalInit</code> function before calling it.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>What about AJAX?</h5>
+    </div>
+
+    <ul class='notes'>
+      <li>All of this happens on DOM ready, so what about content we load after the fact using AJAX?</li>
+      <li>When we load a fragment of HTML via <abbr title='XML HTTP Request'>XHR</abbr>, there's no convenient container to attach class information to.</li>
+      <li>Fortunately we have access to other metadata about the request and response via the <code class='javascript'>XMLHTTPRequest</code> object, including the HTTP headers.</li>
+    </ul>
+
+    <div class='slide'>
+      <h6>Reading HTTP headers in JavaScript</h6>
+      <p><code class='javascript'>xhr.getResponseHeader("X-With-JavaScript");</code></p>
+    </div>
+
+    <ul class='notes'>
+      <li>We can use custom HTTP headers in the same was as we used the body class, and process them in the AJAX completion callback.</li>
+      <li>This can be put into a function similar to the DOM ready function mentioned above, and the common parts factored out.</li>
+    </ul>
+
+    <div class='slide'>
+      <h6>Calling <code class='javascript'>init</code> twice?</h6>
+
+      <pre><code class='html'>&lt;div class='gallery'&gt;
+  …
+  <ins title='Added by JavaScript on DOM ready'>&lt;a href='…'&gt;More&lt;/a&gt;</ins>
+  <ins title='Added after an AJAX call'>&lt;a href='…'&gt;More&lt;/a&gt;</ins>
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>Some of our <code class='javascript'>init</code> functions will add elements to the <abbr title='Document Object Model'>DOM</abbr>.</li>
+      <li>If we call them once on DOM ready, and again after an AJAX call has completed we can end up adding duplicate content to the page.</li>
+    </ul>
+
+    <div class='slide'>
+      <h6>Defensive <code class='javascript'>init</code> functions</h6>
+      <pre><code class='javascript'>return {
+  init: function() {
+    jQuery('.gallery<ins title="Use CSS selectors to exclude elements with the enhanced class">:not(.enhanced)</ins>')<ins title='Add the enhanced class to stop this element being enhanced again'>
+      .addClass('enhanced')</ins>
+      .each(function() {
+        var moreLink = jQuery('&lt;a&gt;&lt;/a&gt;')
+                         .text('More')
+                         .click(loadMoreImages);
+
+        jQuery(this).append(moreLink);
+      });
+  }
+};</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>We have to write defensive <code class='javascript'>init</code> functions so we don't enhance the same bit of markup twice and potentially break our pages, e.g. if the JavaScript adds some markup to the page we don't want it to be added twice.</li>
+      <li>Adding a class to enhanced markup also gives us a convenient way of targeting CSS rules which are only appropriate when the JavaScript enhancements have been applied (it's good to keep style rules out of JavaScript, in the same way that it's good to keep JavaScript and CSS out of HTML).</li>
+      <li><ins>Note that if you always use the same class name (e.g. <code>enhanced</code>) you can't initialise two features on the same element (thanks to the person who pointed this out in the Q&amp;A at RubyConfUA).</ins></li>
+    </ul>
+
+    <div class='slide'>
+      <h5>This all sounds like a lot of work</h5>
+    </div>
+
+    <ul class='notes'>
+      <li>We've talked about adding classes to the body, and setting custom HTTP headers.</li>
+      <li>Why not roll all of this into some handy server-side helpers?</li>
+    </ul>
+
+    <div class='slide'>
+      <h6>Requesting JavaScript</h6>
+      <pre><code class='ruby'>def use_javascript_for(feature)
+  @js_features ||= []
+  <span class='annotation' title='Add the feature to an array of enabled features'>@js_features &lt;&lt; feature.to_s.downcase</span>
+<span class='annotation' title='Set an HTTP header if it is an AJAX request'>  if request and request.xhr?
+    header = @js_features.uniq.join(' ')
+    response.headers['X-With-JavaScript'] = header
+  end</span>
+end</code></pre>
+
+      <p>For example:</p>
+      <pre><code><span class='html'>&lt;div class='gallery'&gt; … &lt;/div&gt;</span>
+<span class='ruby'>&lt;% use_javascript_for 'image-gallery' %&gt;</span></code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>Calling <code class='ruby'>use_javascript_for</code> in our views allows bits of HTML to request specific JavaScript enhancment.</li>
+      <li>Generating the HTTP headers and body classes in one place means we can load render a partial as part of a view or load it via XHR and the JavaScript will just work.</li>
+    </ul>
+
+    <div class='slide'>
+      <h6>Adding the classes to the body</h6>
+      <pre><code class='ruby'>def javascript_feature_classes
+  @js_features ||= []
+  @js_features.uniq.map{ |f| "with-js-#{f}" }.join(" ")
+end</code></pre>
+      <p>
+        For example:
+        <code><span class='html'>&lt;body class='</span><span class='ruby'>&lt;%= javascript_feature_classes %&gt;</span><span class='html'>'&gt;</span></code>
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Any questions?</h2>
+      <address class='vcard'>
+        <a class='url' href='http://georgebrock.com'><strong class='fn'>George Brocklehurst</strong></a><br/>
+        <a class='email' href='mailto:georgebrocklehurst@reevoo.com'>georgebrocklehurst@reevoo.com</a><br/>
+        “georgebrock” on <a class='url' href='http://twitter.com/georgebrock'>Twitter</a>, <a class='url' href='http://github.com/georgebrock'>GitHub</a>, etc.
+      </address>
+      <p>
+        These slides with notes and links:<br/>
+        <a class='linky' href='http://georgebrock.com/conferences/barcamplondon8'>georgebrock.com/conferences/barcamplondon8</a>
+      </p>
+    </div>
+  </body>
+</html>
