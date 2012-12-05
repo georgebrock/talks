@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>The hitchhiker's guide to vim</title>
+    <link rel='stylesheet' href='../stylesheets/slides.css'>
+  </head>
+  <body>
+    <div class='slide'>
+      <h1>The hitchhiker's guide to vim</h1>
+      <p>
+        by
+        <strong class='vcard'>
+          <a href='http://georgebrock.com' class='fn url'>
+            George Brocklehurst</a>
+        </strong>
+        (@georgebrock)
+      </p>
+      <p><img src='images/thoughtbot-logo.png' alt='I work for thoughtbot'></p>
+      <p class='notes'>
+        Presented at
+        <strong class='vevent'>
+          <a href='http://www.meetup.com/Stockholm-Vim/' class='summary url'>
+            Stockholm vim</a>,
+          <time class='dtstart' datetime='2012-12-04'>December 2012</time>
+        </strong>
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2><img src='images/dont-panic.png' alt="Don't panic"></h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Everyone says vim is really hard, that's a myth.</li>
+      <li>Think of it like learning a card game or a computer game. You have
+        to learn the hands if you want to play poker, but it's still fun to
+        play as a beginner. The more you play the more you learn.</li>
+      <li>It's OK to use the mouse and the arrow keys &hellip; at first.</li>
+      <li>If you're a Mac user, install
+        <a href='http://code.google.com/p/macvim/'>MacVim</a> for familiar
+        keyboard shortcuts and interface conventions.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>You've got to start somewhere</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Go through <code>vimtutor</code> a few times.</li>
+      <li>Get yourself a cheat sheet.
+        <a href='http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html'>viemu.org's graphical cheat sheet</a>
+        is a good one, but perhaps a bit overwhelming at first.</li>
+    </ul>
+
+    <div class='slide'>
+      <img src='images/cheat-full.gif' alt='Full graphical cheatsheet'>
+    </div>
+
+    <ul class='notes'>
+      <li>Focus on learning a few things at a time.</li>
+      <li>Try to learn what all of the letter keys do (both lower and
+        uppercase).</li>
+      <li>Using a cut-down cheatsheet with just the commands you're learning
+        now can help.</li>
+    </ul>
+
+    <div class='slide'>
+      <img src='images/cheat-partial.gif' alt='Partial graphical cheatsheet'>
+    </div>
+
+    <div class='slide'>
+      <h2>Changing modes</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Vim is a modal editor.</li>
+      <li>Issue commands in <dfn>normal mode</dfn> and type text in
+        <dfn>insert mode</dfn>.</li>
+      <li>Live in normal mode, and dive into insert mode to make small,
+        self-contained changes.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Moving around</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Commands that move the cursor are called <dfn>motions</dfn>.</li>
+      <li>Prefix motions with a number to repeat them.</li>
+      <li>Often easy to remember mnemonics, e.g. <kbd>w</kbd> moves by
+        word.</li>
+      <li>It's also common to move by searching.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Operators</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Operators take a motion as an argument.</li>
+      <li><kbd>d2w</kbd> will <strong>d</strong>elete <strong>2</strong>
+        <strong>w</strong>ords.</li>
+      <li>This is where we start to see the real power of Vim: You can build
+        up functional sentences from multiple commands, and the more you learn
+        the more complex commands you can build.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Text objects</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Used with operators, in place of a motion.</li>
+      <li>Aware of the structure of the text (to some degree).</li>
+      <li>For example, <kbd>dib</kbd> will <strong>d</strong>elete
+        <strong>i</strong>nside <strong>b</strong>rackets.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Repeat the last edit</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>The <kbd>.</kbd> command repeats the last edit.</li>
+      <li>Once you get used to this it's amazingly powerful.</li>
+      <li>Think of your edits as little functions you can apply again and again.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Any questions?</h2>
+    </div>
+
+    <div class='credits slide'>
+      <h3>Image credits</h3>
+      <ul>
+        <li><a href='http://en.wikipedia.org/wiki/File:The_Hitchhiker%27s_Guide_to_the_Galaxy,_english.svg'>
+          http://en.wikipedia.org/wiki/File:The_Hitchhiker%27s_Guide_to_the_Galaxy,_english.svg</a></li>
+        <li><a href='http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html'>
+          http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html</a></li>
+      </ul>
+    </div>
+    </div>
+
+    <script src='../javascripts/jquery.min.js'></script>
+    <script src='../javascripts/slides.js'></script>
+  </body>
+</html>
