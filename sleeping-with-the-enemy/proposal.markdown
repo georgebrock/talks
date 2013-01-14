@@ -2,7 +2,7 @@
 
 ## Talk description
 
-In this session we'll go off the Rails and take a look at what our Pythonaut
+In this session we'll go off the Rails and take a look at what our Pythonista
 cousins are doing with Django.
 
 I'll start with some live coding: recreating DHH's infamous 15 minute blog demo
