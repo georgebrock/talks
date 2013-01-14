@@ -18,5 +18,6 @@ assumptions we make about our work, and inspires us to try new things.
 
 ## Speaker bio
 
-George Brocklehurst builds Rails apps for thoughtbot in Stockholm.  Sometimes he
-misses Django. Before that he was a Django developer who missed Rails sometimes.
+George Brocklehurst is a Rails developer who misses working with Django
+sometimes. Before that he was a Django developer who missed working with Rails
+sometimes. George works for thoughtbot in Stockholm.
