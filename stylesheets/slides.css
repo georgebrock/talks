@@ -119,6 +119,9 @@ a.run-slideshow {
 .slide img {
   max-width:              640px;
 }
+.slide ul.plain {
+  list-style:             none;
+}
 .todo {
   color:                  #cf2332;
   font-weight:            bold;
@@ -180,6 +183,10 @@ body.slideshow .slide ins.present {
 body.slideshow .slide ins.future {
   display:                none;
 }
+body.slideshow .slide ins.block.future {
+  display:                inline;
+  visibility:             hidden;
+}
 
 body.slideshow .slide mark.past,
 body.slideshow .slide mark.future,
@@ -197,6 +204,17 @@ body.slideshow .slide ins.present {
   padding:                5px;
   margin:                 -5px;
   border-radius:          5px;
+}
+
+body.slideshow .slide ul.reveal li.future {
+  visibility:             hidden;
+}
+body.slideshow .slide ul.reveal li.present,
+body.slideshow .slide ul.reveal li.past {
+  visibility:             visible;
+}
+body.slideshow .slide ul.reveal li.past {
+  color:                  #333;
 }
 
 body.slideshow .slide .present .title {

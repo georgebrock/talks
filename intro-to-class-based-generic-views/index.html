@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Intro to class-based generic views in Django</title>
+    <link rel='stylesheet' href='../stylesheets/slides.css'>
+  </head>
+  <body>
+    <div class='slide'>
+      <h1>Intro to class-based generic views in Django</h1>
+      <p>
+        by
+        <strong class='vcard'>
+        <a href='http://georgebrock.com' class='fn url'>
+          George Brocklehurst</a>
+        </strong>
+        (@georgebrock)
+      </p>
+      <p><img src='images/thoughtbot-logo.png' alt='I work for thoughtbot'></p>
+      <p class='notes'>
+        Presented at
+        <strong class='vevent'>
+          <a href='http://www.meetup.com/djangosthlm/events/101637322/' class='summary url'>
+            Django Stockholm Meetup Group</a>,
+        <time class='dtstart' datetime='2013-02-12'>February 2013</time>
+        </strong>
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Generic what-based who?</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Class-based views were introduced in Django 1.3, about 2 years ago.</li>
+      <li>They're still not as well known and popular as they should be.</li>
+      <li>
+        The basic idea:
+        <strong>Define view classes instead of view functions</strong>.
+      </li>
+    </ul>
+
+    <div class='slide'>
+      <h3 class='notes'>A function-based view</h3>
+      <pre><code>from django.template.response import TemplateResponse
+
+
+def homepage_view(<mark title='Django passes in a request'>request</mark>):
+    <mark title='We return a response'>return TemplateResponse("homepage.html")</mark>
+ </code></pre>
+    </div>
+
+    <div class='slide'>
+      <h3 class='notes'>A class-based view</h3>
+      <pre><code>from django.template.response import TemplateResponse
+from django.views.generic import View
+
+class HomepageView(<mark title='Inherit from django.views.generic.View'>View</mark>):
+    def <mark title='Methods named after HTTP verbs (get, post, put, delete, head, options or trace)'>get</mark>(self, <mark title='Django passes in a request'>request</mark>):
+        <mark title='We return a response'>return TemplateResponse("homepage.html")</mark></code></pre>
+    </div>
+
+    <p class='notes'>
+      There are <code>View</code> sublcasses that cover common cases, like
+      rendering a template. If we use those instead we can simplify things.
+    </p>
+
+    <div class='slide'>
+      <h3 class='notes'>A better class-based view</h3>
+      <pre><code> 
+from django.views.generic import TemplateView
+
+class HomepageView(<mark title='Inherit from a subclass of View'>TemplateView</mark>):
+    <mark title='Configure the view with attributes'>template_name</mark> = "homepage.html"
+ </code></pre>
+    </div>
+
+    <div class='slide'>
+      <h3 class='notes'>Examples of other <code>View</code> subclasses</h3>
+      <pre><code>class BlogPostListView(<mark title='Display a list of model instances'>ListView</mark>):
+    model = BlogPost
+
+class BlogPostDetailView(<mark title='Display the details of a single model instance'>DetailView</mark>):
+    model = BlogPost
+
+class BlogPostCreateView(<mark title='Display a create form, and handle submitting the form'>CreateView</mark>):
+    model = BlogPost
+
+class BlogPostUpdateView(<mark title='Display an update form, and handle submitting the form'>UpdateView</mark>):
+    model = BlogPost
+
+class BlogPostDeleteView(<mark title='Delete a model instance, and then redirect'>DeleteView</mark>):
+    model = BlogPost
+    success_url = reverse_lazy("blog_post_list")
+
+# ... and there are more!</code></pre>
+    </div>
+
+    <div class='slide'>
+      <h2>Why is this better?</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>
+        They give us four big benefits:
+        <ol>
+          <li>Sensible default behaviour from the <code>View</code> class.</li>
+          <li>Classes are better than functions.</li>
+          <li>Convention is better than configuration.</li>
+          <li>Repeating yourself is boring.</li>
+        </ol>
+      </li>
+    </ul>
+
+    <div class='slide'>
+      <h3>The <code>View</code> class is smarter than it looks</h3>
+    </div>
+
+    <ul class='notes'>
+      <li>
+        Take a look at the
+        <a href='https://github.com/django/django/blob/master/django/views/generic/base.py#L27'>
+          <code>View</code> class source code</a>.
+      </li>
+      <li>Get <a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2'><code>OPTIONS</code></a> requests for free.</li>
+      <li>Get HTTP Method Not Allowed (405) errors for free.</li>
+      <li>With function-based views, we have to remember to check HTTP verbs ourselves.</li>
+    </ul>
+
+    <div class='slide'>
+      <pre><code>from django.template.response import TemplateResponse
+<ins class='block' title='Only allow GET and HEAD requests'>from django.views.decorators.http import require_safe
+
+@require_safe</ins>
+def homepage_view(request):
+    return TemplateResponse("homepage.html")
+</code></pre>
+    </div>
+
+    <div class='slide'>
+      <h4><code>GET</code> vs. <code>POST</code></h4>
+    </div>
+
+    <ul class='notes'>
+      <li>The HTTP verbs we permit matter.</li>
+      <li><code>GET</code> and <code>HEAD</code> requests shouldn't have side
+        effects. <code>POST</code>, <code>PUT</code>, and <code>DELETE</code>
+        may have side effects.</li>
+      <li>If you accept <code>GET</code> requests to views that have side
+        effects you could end up in trouble.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>Classes over functions</h3>
+    </div>
+
+    <ul class='notes'>
+      <li>Split up complex view functions into multiple methods with shared
+        state.</li>
+      <li>Take advantage of inheritance (we'll see a lot of this with the
+        generic views).</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>Convention over configuration</h3>
+    </div>
+
+    <ul class='notes'>
+      <li>Lots of small decisions don't matter, as long as we're consistent (e.g. what should I call the template that this view renders?).</li>
+      <li>Inconsistency in an application slows developers down.</li>
+      <li>Maintaining app-level conventions takes time.</li>
+      <li>
+        Framework-level convention is best:
+        <ul>
+          <li>It's easy for developers to move between apps.</li>
+          <li>Consistency takes less time; the decision is hidden from us.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class='slide'>
+      <h4>Conventions are encoded in subclasses of <code>View</code></h4>
+    </div>
+
+    <ul class='notes'>
+      <li>Django provides subclasses of <code>View</code> for common types of view.</li>
+      <li>These subclasses provide conventions; small, usually unimportant decisions are lifted out of our code into the parent class in Django.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>Decisions, decisions</h5>
+      <pre><code>class BlogPostDetailView(View):
+    def get(self, request, *args, **kwargs):
+        return TemplateResponse(
+            <mark title='What should the template be called?'>"blog/blogpost_detail.html"</mark>,
+            context={
+                <mark title='What should the context variable be called?'>"blogpost"</mark>: self.get_object(),
+            },
+        )
+
+    def get_object(self):
+        return <mark title="Don't forget to 404!">get_object_or_404</mark>(
+            BlogPost,
+            pk=self.kwargs.get(<mark title='What should the URL keyword argument be called?'>"pk"</mark>),
+        )</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>There are lots of small decisions highlighted in this class.</li>
+    </ul>
+
+    <div class='slide'>
+      <h5>Using Django's <code>DetailView</code></h5>
+      <pre><code>class BlogPostDetailView(DetailView):
+    model = BlogPost
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>Django's <code>DetailView</code> takes the small decisions off our hands.</li>
+      <li>We can set attributes or override methods when we need to go outside of the conventions.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>But my app is unconventional!</h4>
+    </div>
+
+    <div class='slide'>
+      <h5>Override conventions<span class='notes'> with attributes</span></h5>
+      <pre><code>class BlogPostDetailView(DetailView):
+    model = BlogPost
+    queryset = BlogPost.objects.<mark title='Only display published blog posts'>filter(published=True)</mark>
+ 
+ 
+</code></pre>
+    </div>
+
+    <div class='slide'>
+      <h5>Override conventions<span class='notes'> with methods</span></h5>
+      <pre><code>class BlogPostDetailView(DetailView):
+    model = BlogPost
+ 
+    def <mark title='The same as the attribute, with a "get_" prefix'>get_queryset</mark>(self):
+        return BlogPost.objects.filter(published=True)</code></pre>
+    </div>
+
+    <ul class='notes'>
+      <li>The attributes we can set and the methods we can override mostly
+        follow this pattern: the attribute is <code>queryset</code>, the method
+        is <code><mark>get_</mark>queryset</code>.</li>
+    </ul>
+
+    <div class='slide'>
+      <h4>The Template Method pattern</h4>
+    </div>
+
+    <ul class='notes'>
+      <li>Each <code>View</code> subclass includes various mixins.</li>
+      <li>Each mixin can be thought of as implementing the
+        <a href='http://en.wikipedia.org/wiki/Template_method_pattern'>Template Method pattern</a></li>
+    </ul>
+
+    <div class='slide'>
+      <h5><span class='notes'>Example: </span>The <code>SingleObject</code> mixin</h5>
+      <p><code class='inline'>get_object()</code> is the template method</p>
+      <ul class='reveal'>
+        <li><code class='inline'>get_queryset()</code> &rArr; <code class='inline'>self.queryset</code>
+        <li><code class='inline'>self.pk_url_kwarg</code> and <code class='inline'>self.slug_url_kwarg</code></li>
+        <li><code class='inline'>get_slug_field()</code> &rArr; <code class='inline'>self.slug_field</code>
+      </ul>
+    </div>
+
+    <div class='slide'>
+      <h4>How do I know what to override?</h4>
+    </div>
+
+    <ul class='notes'>
+      <li>If required attributes or URL keyword arguments are missing, you will
+        get a very helpful <code>ImproperlyConfigured</code> or
+        <code>AttributeError</code> exception telling you exactly what to
+        do.</li>
+      <li>There is a learning curve, but you will end up learning <em>a</em>
+        set of conventions, so it makes sense to learn this one.</li>
+      <li>Read the documentation, the
+        <a href='https://docs.djangoproject.com/en/dev/ref/class-based-views/flattened-index/'>flattened index</a>
+        is especially useful for reference.</li>
+      <li>Read the code, start from
+        <a href='https://github.com/django/django/blob/master/django/views/generic/__init__.py'><code>django/views/generic/__init__.py</code></a></li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Use class-based views!</h2>
+      <ul>
+        <li>The <code class='inline'>View</code> class will give you free functionality.</li>
+        <li>Replacing complex functions with classes will give you a cleaner codebase.</li>
+        <li>Conventions will help you work faster.</li>
+        <li>Generic base classes stop you repeating yourself.</li>
+      </ul>
+    </div>
+
+    <div class='slide'>
+      <h2>Questions?</h2>
+      <p>
+        <span class='notes'>Ask now, or later:</span>
+        <b><a href='http://twitter.com/georgebrock'>@georgebrock</a></b>
+        <span class='notes'>on Twitter</span> or <span class='notes'>email</span>
+        <b><a href='mailto:george@thoughtbot.com'>george@thoughtbot.com</a></b>
+      </p>
+      <p><img src='images/thoughtbot-logo.png' alt='I work for thoughtbot'></p>
+
+      <p>
+        <span class='notes'>These slides:</span>
+        <a href='http://georgebrock.github.com/talks/intro-to-class-based-generic-views'>http://georgebrock.github.com/talks/intro-to-class-based-generic-views</a>
+      </p>
+    </div>
+
+    <script src='../javascripts/jquery.min.js'></script>
+    <script src='../javascripts/slides.js'></script>
+  </body>
+</html>
+
+<!-- https://docs.djangoproject.com/en/dev/ref/class-based-views/flattened-index/ -->

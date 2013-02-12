@@ -1,7 +1,7 @@
 var Slides = (function() {
 
   var runLink, currentSlide, currentElement;
-  var highlightSelector = 'ins, mark, .annotation';
+  var highlightSelector = 'ins, mark, .annotation, ul.reveal li';
 
   var start = function() {
     $('.slide, .notes').hide();
