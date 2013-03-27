@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang='en-GB'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Sleeping with the enemy</title>
+    <link rel='stylesheet' href='../stylesheets/slides.css'>
+  </head>
+  <body>
+    <div class='slide'>
+      <h1>Sleeping with the enemy</h1>
+      <p>
+        by
+        <strong class='vcard'>
+        <a href='http://georgebrock.com' class='fn url'>
+          George Brocklehurst</a>
+        </strong>
+        (@georgebrock)
+      </p>
+      <p><img src='../images/thoughtbot-logo.png' alt='I work for thoughtbot'></p>
+      <p class='notes'>
+        Presented at
+        <strong class='vevent'>
+          <a href='http://rubymanor.org' class='summary url'>Ruby Manor 4</a>,
+          <time class='dtstart' datetime='2013-04-06'>6th April 2013</time>
+        </strong>
+        and
+        <strong class='vevent'>
+          <a href='http://railsconf.com' class='summary url'>RailsConf 2013</a>,
+          <time class='dtstart' datetime='2013-04-29'>29th April 2013</time>
+        </strong>
+      </p>
+    </div>
+
+    <p class='notes'>
+      This talk is a comparison of Rails and Django. All of the code examples
+      come from a Django application which can be found here:
+      <a href='http://github.com/georgebrock/swte-demo'>github.com/georgebrock/swte-demo</a>
+    </p>
+
+    <div class='slide'>
+      <h2>They&rsquo;re not really the enemy!</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>I'm not going to be trying to pick a winner here.</li>
+      <li>I will focus on areas where I think Django does better, but only
+          because those are the places where we have the most to learn.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>You say &lsquo;tomato&rsquo;, I say &lsquo;tomato&rsquo;</h2>
+    </div>
+
+    <ul class='notes'>
+      <li>Django and Rails are solving the same problem: Abstracting away the
+          common, boring bits of building a web site.</li>
+      <li>They do that in very different ways.</li>
+      <li>We're going to be looking at <strong>unfamiliar solutions</strong> to
+          very <strong>familiar problems</strong>.</li>
+      <li>Seeing alternatives is good for us, even when they're not directly
+          applicable to our day to day work.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Anatomy of a Django project</h2>
+    </div>
+
+    <div class='slide'>
+      <h3 class='notes'>Project layout</h3>
+      <pre>
+        ├── <mark>demo</mark>
+        │   ├── __init__.py
+        │   ├── settings.py
+        │   ├── urls.py
+        │   └── wsgi.py
+        ├── <mark>apps</mark>
+        │   ├── __init__.py
+        │   ├── <mark>blog</mark>
+        │   │   ├── __init__.py
+        │   │   ├── models.py
+        │   │   ├── views.py
+        │   │   └── ...
+        │   └── ...
+        ├── <mark>manage.py</mark>
+        ├── requirements.txt
+        └── <mark>templates</mark>
+            └── ...
+      </pre>
+    </div>
+    <ul class='notes'>
+      <li><code>demo</code> is the name of the projects; the <code>demo</code>
+          directory mostly contains project level configuration.</li>
+      <li><code>apps</code> are groups of associated models, views, and other
+          code. In this project <code>blog</code> is an example of an app.</li>
+      <li><code>manage.py</code> is the command line interface to the Django
+          project, for example <code>python manage.py runserver</code> is the
+          equivalent of <code>rails server</code>.</li>
+      <li><code>templates</code> contains HTML templates. The location of this
+          directory is configurable and may vary from project to project.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Models</h2>
+    </div>
+
+    <div class='slide'>
+      <pre class='prettyprint lang-python'>from django.db import models
+
+class <mark>BlogPost</mark>(<mark>models.Model</mark>):
+    <mark>title</mark> = <mark>models.CharField</mark>(<mark>max_length=100</mark>)
+    body = models.TextField()
+    published = models.BooleanField()
+    publish_date = models.DateTimeField()</pre>
+    </div>
+    <p class='notes'>
+      <a href='https://github.com/georgebrock/swte-demo/blob/54321ab/apps/blog/models.py'>
+        See <code>apps/blog/models.py</code> @ <code>54321ab</code>
+      </a>
+    </p>
+
+    <ul class='notes'>
+      <li><code>BlogPost</code> inherits from <code>django.db.models.Model</code>;
+          this is the equivalent of <code>ActiveRecord::Base</code></li>
+      <li>The schema is derived from the model. This might be familiar if you've
+          used Data Mapper with Rails.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Displaying blog posts</h2>
+    </div>
+
+    <p class='notes'>
+      Models on their own aren't very interesting: we need to display them
+      somehow. In Django, we do this using <string>views</strong>
+    </p>
+
+    <div class='slide'>
+      <h3>Views are like actions</h3>
+
+      <ol class='diagram'>
+        <li><code>Request</code></li>
+        <li><span>View</span></li>
+        <li><code>Response</code></li>
+      </ol>
+    </div>
+
+    <ul class='notes'>
+      <li>A view is a callable which takes a <code>Request</code> and returns a
+          <code>Response</code>.</li>
+      <li>A URL pattern is routed to a single view. The view is responsible for
+          handling all requests to that URL, regardless of the HTTP method they
+          used (<code>GET</code>, <code>POST</code>, etc.)</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>Same old, same old</h3>
+    </div>
+
+    <p class='notes'>
+      View code, like Rails action code, gets very repetitive. How Django
+      removes the repetition by providing generic class-based views; classes
+      we can use as the basis of our views.
+    </p>
+
+    <div class='slide'>
+      <pre class='prettyprint lang-python'>from django.views.generic import DetailView
+from apps.blog.models import BlogPost
+
+class BlogPostDetailView(<mark>DetailView</mark>):
+    model = BlogPost
+&nbsp;
+&nbsp;
+&nbsp;</pre>
+    </div>
+    <p class='notes'>
+      <a href='https://github.com/georgebrock/swte-demo/blob/54321ab/apps/blog/views.py'>
+        See <code>apps/blog/views.py</code> @ <code>54321ab</code>
+      </a>
+    </p>
+    <ul class='notes'>
+      <li>We have specified the model to use, the <code>DetailView</code> has
+          done the rest.</li>
+      <li>Django is providing a lot of conventions here:
+          <ol>
+            <li>Finding the <code>BlogPost</code> ID in the URL</li>
+            <li>Loading the <code>BlogPost</code> instance</li>
+            <li>Deciding what to call the variable used to pass the
+                <code>BlogPost</code> to the template.</li>
+            <li>Deciding which template to render.</li>
+          </ol>
+          </li>
+      <li>Is this too much convention? It's much more than Rails does for us.
+          Let's see what happens when we want to customise the view.</li>
+    </ul>
+
+    <div class='slide'>
+      <pre class='prettyprint lang-python'>from django.views.generic import DetailView
+from apps.blog.models import BlogPost
+
+class BlogPostDetailView(DetailView):
+    model = BlogPost
+    <mark>queryset</mark> = <mark>BlogPost.objects.filter</mark>(
+        published=True,
+    )</pre>
+    </div>
+    <p class='notes'>
+      <a href='https://github.com/georgebrock/swte-demo/blob/0e54a93/apps/blog/views.py'>
+        See <code>apps/blog/views.py</code> @ <code>0e54a93</code>
+      </a>
+    </p>
+
+    <ul class='notes'>
+      <li>A <code>QuerySet</code> is equivalent to an
+          <code>ActiveRecord::Relation</code>: it describes a query, but doesn't
+          execute it until we ask it for results.</li>
+      <li>The <code>DetailView</code> uses its <code>QuerySet</code> as the
+          starting point for searching for the <code>BlogPost</code> to display.
+          </li>
+      <li>This is set at class definition time. What if we want to vary the
+          <code>QuerySet</code> at runtime based on some property of the
+          request?</li>
+    </ul>
+
+    <div class='slide'>
+      <pre class='prettyprint lang-python'>from django.views.generic import DetailView
+from apps.blog.models import BlogPost
+
+class BlogPostDetailView(DetailView):
+    model = BlogPost
+
+    def <mark>get_queryset</mark>(self):
+        if <mark>self.request.GET</mark>.<mark>get("preview")</mark>:
+            return <mark>BlogPost.objects.all()</mark>
+        else:
+            return <mark>BlogPost.objects.filter</mark>(
+                published=True,
+            )</pre>
+    </div>
+    <p class='notes'>
+      <a href='https://github.com/georgebrock/swte-demo/blob/31374df/apps/blog/views.py'>
+        See <code>apps/blog/views.py</code> @ <code>31374df</code>
+      </a>
+    </p>
+
+    <ul class='notes'>
+      <li>Instead of setting an <em>attribute</em>, we define a <em>method</em>.
+          </li>
+      <li>Note the relationship between the name of the method and the attribute
+          it replaced.</li>
+      <li>Now the app will display unpublished posts, if the query string has
+          a preview value (e.g. if the URL ended with <code>?preview=1</code>)
+          </li>
+    </ul>
+
+    <div class='slide'>
+      <h4>Behind the scenes</h4>
+      <ul>
+        <li>
+          <code><b>get()</b></code>
+          <ul class='reveal'>
+            <li><code><b>get_template_names()</b> &rarr; self.template_name</code></li>
+            <li><code><b>get_slug_field()</b> &rarr; self.slug_field</code></li>
+            <li><code><b>get_queryset()</b> &rarr; self.queryset</code></li>
+            <li><code><b>get_object()</b></code></li>
+            <li><code><b>get_context_object_name()</b> &rarr; self.context_object_name</code></li>
+            <li><code><b>get_context_data()</b></code></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <ul class='notes'>
+      <li>We view blog posts by making an HTTP GET request, so the entry point
+          to our view is a method called <code>get</code>.</li>
+      <li>The <code>get</code> method calls various accessors, most of which
+          return an attribute by default (e.g. <code>get_queryset</code> will
+          return <code>self.queryset</code>)</li>
+    </ul>
+
+    <div class='slide'>
+      <h3>The template method pattern</h3>
+    </div>
+
+    <ul class='notes'>
+      <li>This is an example of the template method pattern.</li>
+      <li><code>get</code> is the template method.</li>
+      <li>The other methods are the primitive operations.</li>
+      <li>This provides <strong>conventional behaviour</strong>, whereas Rails
+          often stops at <strong>conventional structure</strong>.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Creating blog posts</h2>
+    </div>
+
+    <p class='notes'>
+      So far we've only looked at displaying data. Another very common pattern
+      is getting data from the user and adding it to a database.
+    </p>
+
+    <div class='slide'>
+      <ol class='diagram'>
+        <li><span>HTML form</span></li>
+        <li><code>POST</code></li>
+        <li><span>?<span class='notes'>: Something happens in our application</span></span></li>
+        <li><code>SQL</code></li>
+        <li><span>Database</span></li>
+      </ol>
+    </div>
+
+    <ul class='notes'>
+      <li>This is a very common pattern in websites.</li>
+      <li>Frameworks provide a lot of support, and remove a lot of complexity.</li>
+      <li>There are a lot of other benefits too (CSRF protection, HTTP parsing,
+          etc.)</li>
+      <li>We will focus on two aspects:
+          <ul>
+            <li>Type conversion</li>
+            <li>The &ldquo;strong parameters&rdquo; problem</li>
+          </ul></li>
+    </ul>
+
+    <div class='slide'>
+      <pre class='prettyprint lang-python'>from django.views.generic import CreateView
+from apps.blog.models import BlogPost
+
+class BlogPostCreateView(<mark>CreateView</mark>):
+    model = BlogPost</pre>
+    </div>
+
+    <p class='notes'>
+      <a href='https://github.com/georgebrock/swte-demo/blob/235d27d/apps/blog/views.py'>
+        See <code>apps/blog/views.py</code> @ <code>235d27d</code>
+      </a>
+    </p>
+    <ul class='notes'>
+      <li>We can create blog posts using another of Django's generic class-based
+          views: the <code>CreateView</code>.</li>
+      <li>The <code>CreateView</code> responds to a GET request by displaying
+          a form, and to a POST request by creating an object. It's like the
+          <code>new</code> and <code>create</code> actions in a Rails controller
+          rolled into one.</li>
+      <li>Django has a very capable admin system, which is configured in the
+          demo app to provide a comparison. The techniques I'm showing here
+          would be more commonly used for user created data, like comments. I'm
+          limiting us to one model here for the sake of simplicity.</li>
+    </ul>
+
+
+    <div class='slide'>
+      <h3>Forms</h3>
+      <ol class='bi-directional diagram'>
+        <li><span>Form</span></li>
+        <li><span>Field</span></li>
+        <li><span>Widget</span></li>
+      </ol>
+    </div>
+
+    <div class='slide'>
+      <h4 class='notes'>A concrete example</h4>
+      <ol class='bi-directional diagram'>
+        <li><span>Form</span></li>
+        <li><span>DateField</span></li>
+        <li><span>DateSelectWidget</span></li>
+        <li><img src='images/date-select-widget.png' alt='Date select widget'></li>
+      </ol>
+    </div>
+
+    <ul class='notes'>
+      <li><code>CreateView</code> doesn't interact directly with the model. It
+          goes through a <code>Form</code>.</li>
+      <li>The <code>Form</code> is responsible for rendering the form interface
+          (when the user makes a GET request) and for processing the submitted
+          data (when the user makes a POST request).</li>
+      <li>A <code>Form</code> is more or less just an ordered list of
+          <code>Field</code> instances.</li>
+      <li>A <code>Field</code> understands types and type conversion, e.g. a
+          <code>DateField</code> understands how to convert between strings
+          and dates.</li>
+      <li>A <code>Widget</code> understands HTML forms and the HTTP requests
+          they generate.</li>
+      <li>A <code>CreateView</code> will generate a form for us automatically,
+          but let's use a custom form to make it more clear what's going on.</li>
+    </ul>
+
+    <div class='slide'>
+      <pre class='prettyprint lang-python'>from django.views.generic import CreateView
+from apps.blog.models import BlogPost
+<ins>from apps.blog.forms import BlogPostForm</ins>
+
+class BlogPostCreateView(CreateView):
+    model = BlogPost
+    <ins>form_class = BlogPostForm</ins></pre>
+    </div>
+
+    <p class='notes'>
+      <a href='https://github.com/georgebrock/swte-demo/blob/e95b5c4/apps/blog/views.py'>
+        See <code>apps/blog/views.py</code> @ <code>e95b5c4</code>
+      </a>
+    </p>
+
+    <div class='slide'>
+      <pre class='prettyprint lang-python'>from django import forms
+from django.forms.extras.widgets import \
+    SelectDateWidget
+from apps.blog.models import BlogPost
+
+class BlogPostForm(<mark>forms.ModelForm</mark>):
+    class <mark>Meta</mark>:
+        <mark>model</mark> = BlogPost
+        <mark>exclude</mark> = ("published", )
+        <mark>widgets</mark> = {
+            <mark>"publish_date": SelectDateWidget()</mark>,
+        }</pre>
+    </div>
+
+    <p class='notes'>
+      <a href='https://github.com/georgebrock/swte-demo/blob/e95b5c4/apps/blog/forms.py'>
+        See <code>apps/blog/forms.py</code> @ <code>e95b5c4</code>
+      </a>
+    </p>
+    <ul class='notes'>
+      <li>A <code>ModelForm</code> derives a form from a model's fields.</li>
+      <li>The <code>Meta</code> class contains configuration.</li>
+      <li>The <code>exclude</code> attribute tells the form if there are any
+          fields in the model which should not be included in the form.</li>
+      <li>Because the form handles both the UI rendering and processes the
+          results, it's unlikely that a developer would forget to remove a
+          sensitive field here.</li>
+      <li>The <code>widgets</code> attribute lets us customise the widgets that
+          each field uses. Sensible defaults are provided for each field
+          type.</li>
+    </ul>
+
+    <div class='slide'>
+      <h3 class='notes'>Displaying the form</h3>
+      <figure>
+        <img src='images/form.png' alt='Screenshot of the form'>
+        <figcaption class='notes'>
+          The user interface produced by this <code class='inline'>Form</code>.
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class='slide'>
+      <h3 class='notes'>Submitting the form</h3>
+
+      <ol class='diagram'>
+        <li><span>HTML form</span></li>
+        <li><code>"publish_date_year=2013&amp;<wbr>publish_date_month=4&amp;<wbr>publish_date_day=6"</code></li>
+        <li><span>Plumbing</span></li>
+        <li><code>{"publish_date_year": "2013", "publish_date_month": "4", "publish_date_day": "6"}</code></li>
+        <li><span>BlogPostCreateView</span></li>
+        <li><span>BlogPostForm</span></li>
+        <li><code>{"publish_date_year": "2013", "publish_date_month": "4", "publish_date_day": "6"}</code></li>
+        <li><span>SelectDateWidget</span></li>
+        <li><code>"2013-04-06"</code></li>
+        <li><span>DateField</span></li>
+        <li><code>datetime.date(2013, 4, 6)</code></li>
+        <li><span>BlogPostForm</span></li>
+        <li><code>{"publish_date": datetime.date(2013, 4, 6)}</code></li>
+        <li><span>BlogPost</span></li>
+      </ol>
+    </div>
+
+    <div class='slide'>
+      <h3 class='notes'>What happens in Rails?</h3>
+      <ol class='diagram'>
+        <li><span>HTML form</span></li>
+        <li><code>"blog_post[publish_date(1i)]=2013&amp;<wbr>blog_post[publish_date(2i)]=4&amp;<wbr>blog_post[publish_date(3i)]=6"</code></li>
+        <li><span>Plumbing</span></li>
+        <li><code>{:blog_post =&gt; {:'publish_date(1i)' =&gt; '2013', :'publish_date(2i)' =&gt; '4', :'publish_date(3i)' =&gt; '6'}}</code></li>
+        <li><span>BlogPostsController</span></li>
+        <li><code>{:'publish_date(1i)' =&gt; '2013', :'publish_date(2i)' =&gt; '4', :'publish_date(3i)' =&gt; '6'}</code></li>
+        <li><span>BlogPost</span></li>
+        <li><span>ActiveRecord::<wbr>AttributeAssignment</span></li>
+        <li><code>[2013, 4, 6]</code></li>
+        <li><code>Date.new(2013, 4, 6)</code></li>
+      </ol>
+    </div>
+
+    <div class='slide'>
+      <h3>The single responsibility principle</h3>
+    </div>
+
+    <ul class='notes'>
+      <li>In Django, a different object (<code>Form</code>, <code>Field</code>
+          or <code>Widget</code>) is responsible for each layer of the request
+          processing.</li>
+      <li>In Rails, the different parts of the processing are as far apart as
+          they could possibly be: a view helper and part of the ORM are tightly
+          coupled.</li>
+      <li>The Django system is very flexible. The values come out of the form
+          ready to be used in any context.</li>
+      <li>The Rails system only works for creating and updating
+          <code>ActiveRecord</code> models.</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>Awesome!</h2>
+    </div>
+    <ul class='notes'>
+      <li>Django and Rails are both great.</li>
+      <li>There are things we can learn from each other.</li>
+      <li>There's been cross pollination in the past, let's have more of it in
+          the future!</li>
+    </ul>
+
+    <div class='slide'>
+      <h2>
+        Hey I've just spoken<br>
+        And this is crazy<br>
+        But here are my details<br>
+        So questions maybe?
+      </h2>
+      <p>
+        <span class='notes'>Ask now, or later:</span>
+        <b><a href='http://twitter.com/georgebrock'>@georgebrock</a></b>
+        <span class='notes'>on Twitter</span> or <span class='notes'>email</span>
+        <b><a href='mailto:george@thoughtbot.com'>george@thoughtbot.com</a></b>
+      </p>
+      <p><img src='../images/thoughtbot-logo.png' alt='I work for thoughtbot'></p>
+
+      <p>
+        <span class='notes'>These slides:</span>
+        <a href='http://georgebrock.com/rubymanor4'>http://georgebrock.com/rubymanor4</a>
+      </p>
+    </div>
+
+    <script src='../javascripts/jquery.min.js'></script>
+    <script src='../javascripts/lib/prettify/prettify.js'></script>
+    <script src='../javascripts/slides.js'></script>
+    <script>prettyPrint();</script>
+  </body>
+</html>

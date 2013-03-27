@@ -24,6 +24,12 @@ dfn {
 
 mark {
   color:                  inherit;
+  background:             transparent;
+}
+
+figure {
+  margin:                 0;
+  padding:                0;
 }
 
 span.path {
@@ -139,6 +145,40 @@ a.run-slideshow {
 .javascript { color: #008; }
 .css { color: #c50; }
 
+ol.diagram {
+  list-style:             none;
+  margin:                 2em 0;
+  padding:                0;
+  text-align:             center;
+}
+ol.diagram li > span,
+ol.diagram li > code {
+  display:                block;
+  margin:                 0 auto;
+}
+ol.diagram li > span {
+  font-family:            'Arial', sans-serif;
+  font-weight:            bold;
+  padding:                1em 0.5em;
+  border:                 3px solid #000;
+  width:                  50%;
+  border-radius:          0.25em;
+}
+ol.diagram li > code {
+  display:                inline-block;
+}
+ol.diagram li:after {
+  display:                block;
+  content:                '↓';
+  font-size:              1em;
+}
+ol.diagram.bi-directional li:after {
+  content:                '↓ ↑';
+}
+ol.diagram li:last-of-type:after {
+  content:                none;
+}
+
 body.slideshow {
   font-size:              40px;
 }
@@ -147,11 +187,14 @@ body.slideshow .slide {
   margin:                 0;
   -webkit-box-shadow:     none;
   margin:                 0 auto;
-  padding:                0 0 60px 0;
-  width:                  980px;
+  padding:                0 20px 60px;
+  width:                  auto;
 }
 body.slideshow .slide code {
   font-size:              75%;
+}
+body.slideshow .slide ol.diagram code {
+  font-size:              100%;
 }
 body.slideshow .slide h1 {
   font-size:              80px;
@@ -198,12 +241,24 @@ body.slideshow .slide ins.future {
 }
 body.slideshow .slide mark.present,
 body.slideshow .slide span.annotation.present,
-body.slideshow .slide ins.present {
+body.slideshow .slide ins.present,
+body.slideshow .slide ol.diagram code.present {
   background:             #d00;
   color:                  #fff;
   padding:                5px;
   margin:                 -5px;
   border-radius:          5px;
+  border-bottom:          2px solid #f00;
+}
+body.slideshow .slide mark.present *,
+body.slideshow .slide span.annotation.present *,
+body.slideshow .slide ins.present *,
+body.slideshow .slide ol.diagram code.present * {
+  color:                 #fff;
+}
+body.slideshow ol.diagram span.present {
+  background:             #d00;
+  color:                  #fff;
 }
 
 body.slideshow .slide ul.reveal li.future {
@@ -218,7 +273,7 @@ body.slideshow .slide ul.reveal li.past {
 }
 
 body.slideshow .slide .present .title {
-  font-family:            'Arial', sans-serif;
+  font-family:            'Helvetica', sans-serif;
   display:                block;
   position:               absolute;
   bottom:                 0;
@@ -238,4 +293,52 @@ body.slideshow .slide.credits h3 {
 
 body.slideshow .slide img {
   max-width:              none;
+}
+
+/****/
+
+pre .str, code .str { color: #65B042; } /* string  - green */
+pre .kwd, code .kwd { color: #E28964; } /* keyword - dark pink */
+pre .com, code .com { color: #AEAEAE; font-style: italic; } /* comment - gray */
+pre .typ, code .typ { color: #89bdff; } /* type - light blue */
+pre .lit, code .lit { color: #3387CC; } /* literal - blue */
+pre .pun, code .pun { color: #fff; } /* punctuation - white */
+pre .pln, code .pln { color: #fff; } /* plaintext - white */
+pre .tag, code .tag { color: #89bdff; } /* html/xml tag    - light blue */
+pre .atn, code .atn { color: #bdb76b; } /* html/xml attribute name  - khaki */
+pre .atv, code .atv { color: #65B042; } /* html/xml attribute value - green */
+pre .dec, code .dec { color: #3387CC; } /* decimal - blue */
+
+pre.prettyprint, code.prettyprint {
+        background-color: #000;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -o-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -khtml-border-radius: 8px;
+        border-radius: 8px;
+}
+
+pre.prettyprint {
+        padding: 1em;
+}
+
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums { margin-top: 0; margin-bottom: 0; color: #AEAEAE; } /* IE indents via margin-left */
+li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none }
+/* Alternate shading for lines */
+li.L1,li.L3,li.L5,li.L7,li.L9 { }
+
+@media print {
+  pre .str, code .str { color: #060; }
+  pre .kwd, code .kwd { color: #006; font-weight: bold; }
+  pre .com, code .com { color: #600; font-style: italic; }
+  pre .typ, code .typ { color: #404; font-weight: bold; }
+  pre .lit, code .lit { color: #044; }
+  pre .pun, code .pun { color: #440; }
+  pre .pln, code .pln { color: #000; }
+  pre .tag, code .tag { color: #006; font-weight: bold; }
+  pre .atn, code .atn { color: #404; }
+  pre .atv, code .atv { color: #060; }
 }

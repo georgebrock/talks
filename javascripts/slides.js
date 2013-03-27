@@ -1,11 +1,11 @@
 var Slides = (function() {
 
   var runLink, currentSlide, currentElement;
-  var highlightSelector = 'ins, mark, .annotation, ul.reveal li';
+  var highlightSelector = 'ins, mark, .annotation, ul.reveal li, ol.diagram li > code, ol.diagram li > span';
 
   var start = function() {
-    $('.slide, .notes').hide();
     runLink.hide();
+    $('.slide, .notes').hide();
     $('body').addClass('slideshow');
     currentSlide = -1;
     show(0);
@@ -52,15 +52,16 @@ var Slides = (function() {
   }
 
   var show = function(slideNo, elNo) {
-    $('.slide').hide();
     var slide = $('.slide:eq(' + slideNo + ')');
 
     if(slideNo !== currentSlide) {
       slide.css({'padding-top': 0});
+      $('body').scrollTop(0);
       var heightDiff = $(window).height() - slide.innerHeight();
       slide.css({'padding-top': (heightDiff / 2) + 'px'});
     }
 
+    $('.slide').remove(slide).hide();
     slide.show();
 
     slide.find(highlightSelector).removeClass('past present future').each(function(i) {
@@ -74,6 +75,21 @@ var Slides = (function() {
         var title = el.attr('title');
         if(title) {
           el.append( $('<span/>').addClass('title').text(title) );
+        }
+
+        var visibleMin = $('body').scrollTop(),
+            visibleMax = visibleMin + $(window).height(),
+            elTop = el.offset().top,
+            elBottom = elTop + el.height();
+
+        if (elTop < visibleMin) {
+          $('body').animate({
+            scrollTop: visibleMin - $(window).height()
+          }, 250);
+        } else if (elBottom > visibleMax) {
+          $('body').animate({
+            scrollTop: visibleMin + $(window).height()
+          }, 250);
         }
       } else {
         el

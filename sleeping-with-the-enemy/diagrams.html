@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+  <html lang='en-GB'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Sleeping with the enemy</title>
+  </head>
+  <body>
+    <div id='raphael'></div>
+    <button id='next'>Next</button>
+    <script type='text/javascript' src='../javascripts/raphael-min.js'></script>
+    <script type='text/javascript'>
+    var next = document.getElementById("next");
+    var paper = Raphael("raphael", 640, 480);
+
+    Raphael.fn.textRect = function (x, y, w, h, r, label) {
+        var set = this.set();
+        set.push(this.rect(x, y, w, h, r).attr({"fill": "#fff"}));
+        set.push(this.text(x + w/2, y + h/2, label).attr({"font-size": "30"}));
+        return set;
+    };
+
+    function Flow(paper) {
+        this.paper = paper;
+        this.nodes = [];
+
+        this.nodeWidth = 200;
+        this.nodeHeight = 100;
+        this.nodeSpacing = 50;
+        this.arrowSize = 10;
+        this.yOffset = 10;
+        this.radius = 10;
+        this.annWidth = 200;
+        this.annHeight = 50;
+
+        this.highlightIndex = -1;
+        this.glow = null;
+    }
+    Flow.prototype = {
+        "addNode": function (label) {
+            var node, x, y;
+
+            x = this.xOffset();
+            y = this.yOffset;
+
+            node = this.paper.textRect(x, y, this.nodeWidth, this.nodeHeight, this.radius, label);
+            this.nodes.push(node);
+        },
+
+        "addArrow": function (label) {
+            var arrow, x, y, arrowX, annX, annY, start, end;
+
+            x = this.xOffset();
+            y = this.yOffset + (this.nodeHeight / 2);
+
+            start = x + "," + y;
+            end = (x + this.nodeSpacing) + "," + y;
+            arrowX = x + this.nodeSpacing - this.arrowSize;
+
+            arrow = this.paper.path(
+                "M" + start +
+                "L" + end +
+                "L" + arrowX + "," + (y + this.arrowSize) + 
+                "M" + end +
+                "L" + arrowX + "," + (y - this.arrowSize)
+            );
+
+            annX = x + (this.nodeSpacing - this.annWidth) / 2;
+            annY = y + this.nodeHeight / 2 + this.arrowSize;
+
+            arrow.annotation = this.paper.textRect(annX, annY, this.annWidth, this.annHeight, 0, label);
+            arrow.annotation.hide();
+            arrow.toBack();
+
+            this.nodes.push(arrow);
+        },
+
+        "xOffset": function () {
+            var lastNode;
+            if (this.nodes.length > 0) {
+                lastNode = this.nodes[this.nodes.length - 1].getBBox();
+                return lastNode.x + lastNode.width;
+            } else {
+                return 10;
+            }
+        },
+
+        "next": function () {
+            var node;
+
+            node = this.nodes[this.highlightIndex];
+            if (node && node.annotation) {
+                node.annotation.hide();
+            }
+
+            if (this.glow) {
+                this.glow.hide();
+            }
+
+            this.highlightIndex += 1;
+            node = this.nodes[this.highlightIndex];
+
+            this.glow = node.glow({"color": "#00f"});
+            if (node.annotation) {
+                node.annotation.show();
+            }
+        }
+    };
+
+    f = new Flow(paper);
+    f.addNode("HTML form");
+    f.addArrow("yey=true");
+    f.addNode("Django\nplumbing");
+    f.addArrow("{'yey': true}");
+    f.addNode("View");
+    document.getElementById("next").onclick = function () { f.next(); };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+* Views are like ACTIONS (not Controllers)
+* Actions are callable (by the time the router gets to them)
+* Parameterized get_query_set without introducing django.contrib.auth
+* Why add a comment, not a blog post? Admin system exists. Dates make more sense
+  when adding a post.
+* Form structure slide: Concrete examples
+* Using a Form, not a ModelForm
+* Forms render their own UI: Relevant to strong parameters
+* Talk about how views handle multiple verbs
+* SRP: Responsible for a single layer of the stack (not a single job)
+* REST isn't relevant
+* Showing URLs when mentioning views would be helpful
+* A bit more on Python syntax, class attrs etc.
+* Relationship between get_* and *, nothing to do with GET request (attr_accessor)
+* Summarise some things at the end: A list of what we talked about
+* A better conculsion, the wider point about communities talking to each other
+
+* NO RSI BREAKS!
+
+## TODO
+
+* Set up a short URL for the slides
+* Push slides to GitHub
