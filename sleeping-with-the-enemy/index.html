@@ -26,7 +26,7 @@
         and
         <strong class='vevent'>
           <a href='http://railsconf.com' class='summary url'>RailsConf 2013</a>,
-          <time class='dtstart' datetime='2013-04-29'>29th April 2013</time>
+          <time class='dtstart' datetime='2013-04-30'>30th April 2013</time>
         </strong>
       </p>
     </div>
@@ -447,18 +447,18 @@ class BlogPostForm(<mark>forms.ModelForm</mark>):
 
       <ol class='diagram'>
         <li><span>HTML form</span></li>
-        <li><code>"publish_date_year=2013&amp;<wbr>publish_date_month=4&amp;<wbr>publish_date_day=6"</code></li>
+        <li><code>"publish_date_year=2013&amp;<wbr>publish_date_month=4&amp;<wbr>publish_date_day=30"</code></li>
         <li><span>Plumbing</span></li>
-        <li><code>{"publish_date_year": "2013", "publish_date_month": "4", "publish_date_day": "6"}</code></li>
+        <li><code>{"publish_date_year": "2013", "publish_date_month": "4", "publish_date_day": "30"}</code></li>
         <li><span>BlogPostCreateView</span></li>
         <li><span>BlogPostForm</span></li>
-        <li><code>{"publish_date_year": "2013", "publish_date_month": "4", "publish_date_day": "6"}</code></li>
+        <li><code>{"publish_date_year": "2013", "publish_date_month": "4", "publish_date_day": "30"}</code></li>
         <li><span>SelectDateWidget</span></li>
-        <li><code>"2013-04-06"</code></li>
+        <li><code>"2013-04-30"</code></li>
         <li><span>DateField</span></li>
-        <li><code>datetime.date(2013, 4, 6)</code></li>
+        <li><code>datetime.date(2013, 4, 30)</code></li>
         <li><span>BlogPostForm</span></li>
-        <li><code>{"publish_date": datetime.date(2013, 4, 6)}</code></li>
+        <li><code>{"publish_date": datetime.date(2013, 4, 30)}</code></li>
         <li><span>BlogPost</span></li>
       </ol>
     </div>
@@ -467,15 +467,15 @@ class BlogPostForm(<mark>forms.ModelForm</mark>):
       <h3 class='notes'>What happens in Rails?</h3>
       <ol class='diagram'>
         <li><span>HTML form</span></li>
-        <li><code>"blog_post[publish_date(1i)]=2013&amp;<wbr>blog_post[publish_date(2i)]=4&amp;<wbr>blog_post[publish_date(3i)]=6"</code></li>
+        <li><code>"blog_post[publish_date(1i)]=2013&amp;<wbr>blog_post[publish_date(2i)]=4&amp;<wbr>blog_post[publish_date(3i)]=30"</code></li>
         <li><span>Plumbing</span></li>
-        <li><code>{:blog_post =&gt; {:'publish_date(1i)' =&gt; '2013', :'publish_date(2i)' =&gt; '4', :'publish_date(3i)' =&gt; '6'}}</code></li>
+        <li><code>{:blog_post =&gt; {:'publish_date(1i)' =&gt; '2013', :'publish_date(2i)' =&gt; '4', :'publish_date(3i)' =&gt; '30'}}</code></li>
         <li><span>BlogPostsController</span></li>
-        <li><code>{:'publish_date(1i)' =&gt; '2013', :'publish_date(2i)' =&gt; '4', :'publish_date(3i)' =&gt; '6'}</code></li>
+        <li><code>{:'publish_date(1i)' =&gt; '2013', :'publish_date(2i)' =&gt; '4', :'publish_date(3i)' =&gt; '30'}</code></li>
         <li><span>BlogPost</span></li>
         <li><span>ActiveRecord::<wbr>AttributeAssignment</span></li>
-        <li><code>[2013, 4, 6]</code></li>
-        <li><code>Date.new(2013, 4, 6)</code></li>
+        <li><code>[2013, 4, 30]</code></li>
+        <li><code>Date.new(2013, 4, 30)</code></li>
       </ol>
     </div>
 
