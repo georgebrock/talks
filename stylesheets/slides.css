@@ -155,6 +155,7 @@ ol.diagram li > span,
 ol.diagram li > code {
   display:                block;
   margin:                 0 auto;
+  border-bottom:          2px solid transparent;
 }
 ol.diagram li > span {
   font-family:            'Arial', sans-serif;
@@ -238,6 +239,7 @@ body.slideshow .slide span.annotation.future,
 body.slideshow .slide ins.past,
 body.slideshow .slide ins.future {
   background:             none;
+  border-bottom:          2px solid transparent;
 }
 body.slideshow .slide mark.present,
 body.slideshow .slide span.annotation.present,
