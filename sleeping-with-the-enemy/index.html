@@ -169,8 +169,8 @@ class <mark>BlogPost</mark>(<mark>models.Model</mark>):
       <pre class='prettyprint lang-python'>from django.views.generic import DetailView
 from apps.blog.models import BlogPost
 
-class BlogPostDetailView(<mark>DetailView</mark>):
-    model = BlogPost
+class <mark>BlogPostDetailView</mark>(<mark>DetailView</mark>):
+    <mark>model</mark> = BlogPost
 &nbsp;
 &nbsp;
 &nbsp;</pre>
@@ -203,7 +203,7 @@ from apps.blog.models import BlogPost
 class BlogPostDetailView(DetailView):
     model = BlogPost
     <mark>queryset</mark> = <mark>BlogPost.objects.filter</mark>(
-        published=True,
+        <mark>published=True</mark>,
     )</pre>
     </div>
     <p class='notes'>
