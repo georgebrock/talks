@@ -173,6 +173,11 @@ class <mark>BlogPostDetailView</mark>(<mark>DetailView</mark>):
     <mark>model</mark> = BlogPost
 &nbsp;
 &nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
 &nbsp;</pre>
     </div>
     <p class='notes'>
@@ -204,7 +209,12 @@ class BlogPostDetailView(DetailView):
     model = BlogPost
     <mark>queryset</mark> = <mark>BlogPost.objects.filter</mark>(
         <mark>published=True</mark>,
-    )</pre>
+    )
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;</pre>
     </div>
     <p class='notes'>
       <a href='https://github.com/georgebrock/swte-demo/blob/0e54a93/apps/blog/views.py'>
