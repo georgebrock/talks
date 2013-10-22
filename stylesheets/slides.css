@@ -318,7 +318,12 @@ pre .atn, code .atn { color: #bdb76b; } /* html/xml attribute name  - khaki */
 pre .atv, code .atv { color: #65B042; } /* html/xml attribute value - green */
 pre .dec, code .dec { color: #3387CC; } /* decimal - blue */
 
-pre.prettyprint, code.prettyprint {
+pre.interactive kbd { color: #fff; }
+pre.interactive samp { color: #89bdff; }
+pre.interactive samp.prompt { color: #999 }
+
+pre.prettyprint, code.prettyprint,
+pre.interactive {
         background-color: #000;
         -moz-border-radius: 8px;
         -webkit-border-radius: 8px;
@@ -328,7 +333,8 @@ pre.prettyprint, code.prettyprint {
         border-radius: 8px;
 }
 
-pre.prettyprint {
+pre.prettyprint,
+pre.interactive {
         padding: 1em;
 }
 

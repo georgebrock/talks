@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang='en-GB'>
+  <head>
+    <meta charset='utf-8'>
+    <title>It's a UNIX system, I know this!</title>
+    <link rel='stylesheet' href='../stylesheets/slides.css'>
+  </head>
+  <body>
+    <div class='slide'>
+      <h1>It&rsquo;s a UNIX system,<br>I know this!</h1>
+      <p>
+        <span class='notes'>by</span>
+        <strong class='vcard'>
+        <a href='http://georgebrock.com' class='fn url'>
+          George Brocklehurst</a>
+        </strong>
+        (@georgebrock)
+      </p>
+      <p><img src='../images/thoughtbot-large.png' alt='I work for thoughtbot'></p>
+      <p class='notes'>
+        Presented at
+        <strong class='vevent'>
+          <a href='http://dotrb.eu' class='summary url'>dotRB</a>,
+          <time class='dtstart' datetime='2013-10-18'>18th October 2013</time>
+        </strong>
+      </p>
+    </div>
+
+    <div class='dark slide'>
+      <h2><img src='images/jurassic_park.jpg' alt='Jurassic Park'></h2>
+    </div>
+
+    <div class='dark slide'>
+      <img src='images/lex.jpg' alt='Photo of Lex'>
+    </div>
+
+    <div class='notes'>
+      <p>
+        There's a famous <a
+        href='http://www.youtube.com/watch?v=dFUlAQZB9Ng'>scene in Jurassic
+        Park</a>, where Lex sits down at a computer she's never used before,
+        recognises it's UNIX, and quickly figures out how to use the system to
+        lock the door.
+      </p>
+
+      <p>
+        It's a great scene, but is it realistic? Can we make interfaces so good
+        that they're discoverable and familiar to people who've never used them
+        before, with UNIX as the common ground?
+      </p>
+
+      <p>
+        Maybe we can, if we follow the <i>conventions</i> and obey the
+        <i>rules</i>.
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Conventions</h2>
+    </div>
+
+    <div class='notes'>
+      <p>
+        Conventions are about what the user expects, but are not enforced by the
+        technology we use. For example, most websites have a logo in the top
+        left corner which links to the homepage.
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Rules</h2>
+    </div>
+
+    <div class='notes'>
+      <p>
+        Rules govern how software interacts with other software. By playing well
+        with other software we can lean on a well known common interface (like a
+        web browser, or a shell) and provide a more familiar experience.
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2 class='notes'>Demo</h2>
+    </div>
+
+    <div class='notes'>
+      <p>
+        The <code>Greeter</code> library provides on class, with one method. We
+        are going to write a command line interface for it.
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>irb &gt;</samp> <kbd>Greeter.greeting "George"</kbd>
+<samp> =&gt; "Hello George"</samp>
+<samp class='prompt'>irb &gt;</samp> <kbd>Greeter.greeting "!!!"</kbd>
+<samp>Greeter::BadNameError: "!!!" is not a valid name</samp></pre>
+
+      <h3>The simplest implementation</h3>
+
+      <p>
+        We begin with a simple implementation:
+        <a href='https://github.com/georgebrock/greeter/commit/4e1f5c8'>4e1f5c8</a>
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet George</kbd>
+<samp>Hello George</samp></pre>
+
+      <h3>Handling errors</h3>
+
+      <p>
+        This implementation handles errors badly. If we give bad input, we see a
+        Ruby stack trace as output.
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet ...</kbd>
+<samp>/code/greeter/lib/greeter.rb:18:in `greeting': "..." is not a valid name (Greeter::BadNameError)
+        from /code/greeter/lib/greeter.rb:7:in `greeting'
+        from /code/greeter/lib/greeter/cli.rb:10:in `run'
+        from /code/greeter/bin/greet:5:in `&lt;main&gt;'</samp></pre>
+
+      <p>
+        We improve the implementation by adding error handling:
+        <a href='https://github.com/georgebrock/greeter/commit/7c779c1'>7c779c1</a>
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet ...</kbd>
+<samp>greet: Error: "..." is not a valid name</samp></pre>
+
+      <h3>Usage messages</h3>
+
+      <p>
+        Running the command with no input produces an error, which goes against
+        the UNIX convention of providing a usage message.
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet</kbd>
+<samp>greet: Error: nil is not a valid name</samp></pre>
+
+      <p>
+        We improve the implementation by adding a usage message:
+        <a href='https://github.com/georgebrock/greeter/commit/9813de9'>9813de9</a>
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet</kbd>
+<samp>usage: greet name</samp></pre>
+
+      <h3>Output streams</h3>
+
+      <p>
+        The command does not play well with other commands, for example sending
+        the output to a file is fine for good input but gives unexpected
+        results for bad input:
+      <p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet George &gt; out.txt</kbd>
+<samp class='prompt'>$</samp> <kbd>cat out.txt</kbd>
+<samp>Hello George</samp>
+<samp class='prompt'>$</samp> <kbd>greet &gt; out.txt</kbd>
+<samp class='prompt'>$</samp> <kbd>cat out.txt</kbd>
+<samp>usage: greet name</samp>
+<samp class='prompt'>$</samp></pre>
+
+      <p>
+        We improve the implemenation by using the correct output streams:
+        <a href='https://github.com/georgebrock/greeter/commit/0a74009'>0a74009</a>
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet &gt; out.txt</kbd>
+<samp>usage: greet name</samp>
+<samp class='prompt'>$</samp> <kbd>cat out.txt</kbd>
+<samp class='prompt'>$</samp></pre>
+
+      <h3>Exit statuses</h3>
+
+      <p>
+        The command does not play well with conditional execution.
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet George &amp;&amp; echo Welcome</kbd>
+<samp>Hello George</samp>
+<samp>Welcome</samp>
+<samp class='prompt'>$</samp> <kbd>greet &amp;&amp; echo Welcome</kbd>
+<samp>usage: greet name</samp>
+<samp>Welcome</samp>
+<samp class='prompt'>$</samp></pre>
+
+      <p>
+        We improve the implementation by using non-zero exit statuses:
+        <a href='https://github.com/georgebrock/greeter/commit/c0b2ec2'>c0b2ec2</a>
+      </p>
+
+      <pre class='interactive'><samp class='prompt'>$</samp> <kbd>greet &amp;&amp; echo Welcome</kbd>
+<samp>usage: greet name</samp>
+<samp class='prompt'>$</samp> <kbd>echo $?</kbd>
+<samp>64</samp></pre>
+
+      <h3>Manual pages</h3>
+
+      <p>
+        The command is not documentated.
+      </p>
+
+      <p>
+        We improve the implementation by adding a manual page:
+        <a href='https://github.com/georgebrock/greeter/commit/3fe6108'>3fe6108</a>
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Any questions?</h2>
+      <p>
+        <span class='notes'>Ask now, or later:</span>
+        <b><a href='http://twitter.com/georgebrock'>@georgebrock</a></b>
+        <span class='notes'>on Twitter</span> or <span class='notes'>email</span>
+        <b><a href='mailto:george@thoughtbot.com'>george@thoughtbot.com</a></b>
+      </p>
+      <p><img src='../images/thoughtbot-large.png' alt='I work for thoughtbot'></p>
+      <p>
+        Get 20% off at
+        <strong><a href='http://learn.thoughtbot.com'>learn.thoughtbot.com</a></strong>
+        <br>with the code
+        <strong>DOTRB13</strong>
+      </p>
+    </div>
+
+    <script src='../javascripts/jquery.min.js'></script>
+    <script src='../javascripts/lib/prettify/prettify.js'></script>
+    <script src='../javascripts/slides.js'></script>
+    <script>prettyPrint();</script>
+  </body>
+</html>
