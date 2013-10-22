@@ -16,8 +16,3 @@
 * A better conculsion, the wider point about communities talking to each other
 
 * NO RSI BREAKS!
-
-## TODO
-
-* Set up a short URL for the slides
-* Push slides to GitHub
