@@ -186,7 +186,7 @@ ol.diagram li:last-of-type:after {
 }
 
 body.slideshow {
-  font-size:              40px;
+  font-size:              60px;
   margin:                 0;
   padding:                0;
 }
@@ -205,14 +205,14 @@ body.slideshow .slide ol.diagram code {
   font-size:              100%;
 }
 body.slideshow .slide h1 {
-  font-size:              80px;
+  font-size:              200%;
 }
 body.slideshow .slide h2,
 body.slideshow .slide h3,
 body.slideshow .slide h4,
 body.slideshow .slide h5,
 body.slideshow .slide h6 {
-  font-size:              60px;
+  font-size:              150%;
 }
 
 body.slideshow a:not(.linky) {
@@ -296,7 +296,7 @@ body.slideshow .slide .present .title {
 
 body.slideshow .slide.credits,
 body.slideshow .slide.credits h3 {
-  font-size:              20px;
+  font-size:              50%;
   text-align:             left;
 }
 
