@@ -54,6 +54,8 @@ var Slides = (function() {
   var show = function(slideNo, elNo) {
     var slide = $('.slide:eq(' + slideNo + ')');
 
+    $('body').toggleClass('dark', slide.hasClass('dark'));
+
     if(slideNo !== currentSlide) {
       slide.css({'padding-top': 0});
       $('body').scrollTop(0);

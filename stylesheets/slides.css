@@ -58,6 +58,11 @@ a.run-slideshow {
   border:                 1px solid #999;
   width:                  640px;
 }
+body.slideshow.dark,
+.slide.dark {
+  background:             black;
+  color:                  white;
+}
 .notes {
   color:                  #666;
   margin:                 0 auto;
@@ -182,6 +187,8 @@ ol.diagram li:last-of-type:after {
 
 body.slideshow {
   font-size:              40px;
+  margin:                 0;
+  padding:                0;
 }
 body.slideshow .slide {
   border:                 none;
