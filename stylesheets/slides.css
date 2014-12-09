@@ -130,8 +130,11 @@ body.slideshow.dark,
 .slide img {
   max-width:              640px;
 }
-.slide ul.plain {
+.slide ul.plain,
+.slide ol.plain {
   list-style:             none;
+  text-align:             center;
+  line-height:            2;
 }
 .todo {
   color:                  #cf2332;
@@ -172,6 +175,7 @@ ol.diagram li > span {
 }
 ol.diagram li > code {
   display:                inline-block;
+  font-size:              2em;
 }
 ol.diagram li:after {
   display:                block;
@@ -222,6 +226,10 @@ body.slideshow a.linky {
   text-decoration:        underline;
 }
 
+body.slideshow figure {
+  text-align:             center;
+}
+
 body.slideshow ins {
   text-decoration:        none;
 }
@@ -270,14 +278,18 @@ body.slideshow ol.diagram span.present {
   color:                  #fff;
 }
 
-body.slideshow .slide ul.reveal li.future {
+body.slideshow .slide ul.reveal li.future,
+body.slideshow .slide ol.reveal li.future {
   visibility:             hidden;
 }
 body.slideshow .slide ul.reveal li.present,
-body.slideshow .slide ul.reveal li.past {
+body.slideshow .slide ul.reveal li.past,
+body.slideshow .slide ol.reveal li.present,
+body.slideshow .slide ol.reveal li.past {
   visibility:             visible;
 }
-body.slideshow .slide ul.reveal li.past {
+body.slideshow .slide ul.reveal li.past,
+body.slideshow .slide ol.reveal li.past {
   color:                  #333;
 }
 
@@ -302,6 +314,14 @@ body.slideshow .slide.credits h3 {
 
 body.slideshow .slide img {
   max-width:              none;
+}
+
+body.slideshow .slide.questions b {
+  display:                block;
+}
+body.slideshow .slide.questions code {
+  display:                block;
+  text-align:             center;
 }
 
 /****/

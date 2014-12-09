@@ -1,7 +1,7 @@
 var Slides = (function() {
 
   var runLink, currentSlide, currentElement;
-  var highlightSelector = 'ins, mark, .annotation, ul.reveal li, ol.diagram li > code, ol.diagram li > span';
+  var highlightSelector = 'ins, mark, .annotation, ol.reveal li, ul.reveal li, ol.diagram li > code, ol.diagram li > span';
 
   var start = function() {
     runLink.hide();
