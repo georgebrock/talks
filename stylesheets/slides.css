@@ -160,6 +160,8 @@ body.slideshow.dark,
   list-style:             none;
   text-align:             center;
   line-height:            2;
+  margin-left:            0;
+  padding-left:           0;
 }
 .todo {
   color:                  #cf2332;
