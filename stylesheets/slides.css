@@ -117,6 +117,9 @@ body.slideshow.dark,
 .slide h1 {
   font-size:              40px;
 }
+.slide ul h3 {
+  font-size:              1.25em;
+}
 .slide h1 code,
 .slide h2 code,
 .slide h3 code,
@@ -239,6 +242,10 @@ body.slideshow .slide h4,
 body.slideshow .slide h5,
 body.slideshow .slide h6 {
   font-size:              150%;
+}
+body.slideshow .slide ul h3 {
+  font-size:              100%;
+  font-weight:            normal;
 }
 
 body.slideshow a:not(.linky) {
