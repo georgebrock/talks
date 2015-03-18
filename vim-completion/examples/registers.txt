@@ -1,0 +1,6 @@
+"Hello" is in the "a" register
+"world" is in the "b" register
+
+How can I quickly type "Hello world"?
+
+

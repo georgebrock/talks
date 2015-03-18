@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang='en-GB'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Let Vim do the typing</title>
+    <link rel='stylesheet' href='../stylesheets/slides.css'>
+  </head>
+  <body>
+    <div class='slide'>
+      <h1>Let Vim do the typing</h1>
+      <p>
+        <span class='notes'>by</span>
+        <strong class='vcard'>
+          <a href='http://georgebrock.com' class='fn url'>
+            George Brocklehurst</a>
+        </strong>
+        (@georgebrock)
+      </p>
+      <p><img src='../images/thoughtbot-large.png' alt='I work for thoughtbot'></p>
+      <p class='notes'>
+        Presented at
+        <strong class='vevent'>
+          <a href='http://www.meetup.com/Vim-London/events/220647861/' class='summary url'>Vim London</a>,
+          <time class='dtstart' datetime='2015-03-17'>17th March 2015</time>
+        </strong>
+      </p>
+    </div>
+
+    <div class='notes'>
+      <p>
+        Even if you're good at it, typing is still slower and more error-prone
+        than not typing. This presentation will explore a few ways to avoid
+        typing by getting Vim to do the typing for you.
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Vi, or Emacs?</h2>
+    </div>
+
+    <div class='notes'>
+      <p>
+        As modal editors, Vi and Vim tend to avoid modifier keys in favour of
+        modes. The behaviour of a key stoke is dictated by the editor's mode.
+        This is different from Emacs-like editors, where behaviour is modified by
+        pressing modifier keys instead of changing mode.
+      </p>
+
+      <p>
+        Everything in this presentation uses modifier keys in insert mode: the
+        commands might feel more like Emacs commands than Vim commands, but they
+        are useful, and have their place in the Vim editing philosophy.
+      </p>
+
+      <p>
+        Vim users like to be efficient, and part of that efficiency is making
+        changes as atomic edits. An atomic edit can be repeated (using
+        <kbd><kbd>.</kbd></kbd>) or undone (using <kbd><kbd>u</kbd></kbd>). A
+        single insert updates the <code>.</code> register, making the inserted text readily
+        available. Sometimes, when we're inserting text that includes something
+        Vim's already seen – either because it's in one of our files, a symbol
+        in our program, or something from one of our registers – it's more
+        efficient <em>not</em> to change mode, and to reach for a modifier key
+        instead.
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>A few of my favourite things</h2>
+
+      <ul class='plain reveal'>
+        <li>
+          <h3>Insert text from a register</h3>
+          <p>
+            <kbd><kbd>ctrl</kbd>+<kbd>r</kbd></kbd>
+          </p>
+        </li>
+        <li>
+          <h3>Last inserted text</h3>
+          <p>
+            <kbd><kbd>ctrl</kbd>+<kbd>a</kbd></kbd>
+          </p>
+        </li>
+      </ul>
+    </div>
+
+    <div class='notes'>
+      <p>
+        There are three common cases where we want to insert something Vim's
+        already seen as part of a larger insert:
+      </p>
+
+      <ol>
+        <li>
+          Insert from a register, using
+          <kbd><kbd>ctrl</kbd>+<kbd>r</kbd><var>register</var></kbd>.
+        </li>
+        <li>
+          Insert the same text as the previous insert, using
+          <kbd><kbd>ctrl</kbd>+<kbd>a</kbd></kbd>. This is similar to
+          <kbd><kbd>ctrl</kbd>+<kbd>r</kbd><kbd>.</kbd></kbd>.
+        </li>
+        <li>
+          Complete a partially-typed word or phrase, which will be the focus
+          of this presentation.
+        </li>
+      </ol>
+    </div>
+
+    <div class='slide'>
+      <h2>Completion</h2>
+    </div>
+
+    <div class='slide'>
+      <h3>Simple word completion</h3>
+      <p>
+        <kbd><kbd>ctrl</kbd>+<kbd>p</kbd></kbd><br>
+        <span class='notes'> or</span><br>
+        <kbd><kbd>ctrl</kbd>+<kbd>n</kbd></kbd>
+      </p>
+    </div>
+
+    <div class='notes'>
+      <ul>
+        <li>
+          <p>
+            <kbd><kbd>ctrl</kbd>+<kbd>p</kbd></kbd> finds the <em>previous</em>
+            matching completion for the partially typed word.
+          </p>
+        </li>
+        <li>
+          <p>
+            <kbd><kbd>ctrl</kbd>+<kbd>n</kbd></kbd> finds the <em>next</em>
+            matching completion for the partially typed word.
+          </p>
+        </li>
+        <li>
+          <p>
+            <kbd><kbd>ctrl</kbd>+<kbd>p</kbd></kbd> is usually more useful,
+            because you're more likely to be looking for a word you just used
+            than a word you're about to use.
+          </p>
+        </li>
+        <li>
+          <p>
+            Where Vim looks for completions is controlled by the
+            <code>complete</code> setting. The default is
+            <code>.,w,b,u,t,i</code>, which means Vim will look in:
+          </p>
+          <ol>
+            <li>The current buffer.</li>
+            <li>Buffers in other windows.</li>
+            <li>Other loaded buffers.</li>
+            <li>Unloaded buffers.</li>
+            <li>Tags.</li>
+            <li>Included files.</li>
+          </ol>
+          <p>I also like to add <code>kspell</code> to the end of the list:</p>
+          <ol start='7'>
+            <li>
+              The active spell checking dictionary, when spell checking is
+              enabled.
+            </li>
+          </ol>
+        </li>
+      </ul>
+    </div>
+
+    <div class='slide'>
+      <h3>Tag completion</h3>
+      <p><kbd><kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>]</kbd></kbd></p>
+    </div>
+
+    <div class='notes'>
+      <p>
+        Sometimes, you know that the word you want to complete isn't just any
+        old word that appears in your file or files; you know you're trying to
+        complete a symbol from your program.
+      </p>
+      <p>
+        If you're using
+        <a href='http://ctags.sourceforge.net/ctags.html'>ctags(1)</a>
+        then you can complete a word in your tags file using
+        <kbd><kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>]</kbd></kbd>.
+      </p>
+      <p>
+        The initial <kbd><kbd>ctrl</kbd>+<kbd>x</kbd></kbd> puts Vim into a
+        completion mode, which is a sub-mode of insert mode. We'll see this
+        prefix again.
+      </p>
+      <p>
+        When the completion menu appears, you can use
+        <kbd><kbd>ctrl</kbd>+<kbd>p</kbd></kbd> and
+        <kbd><kbd>ctrl</kbd>+<kbd>n</kbd></kbd> to navigate through the options.
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h3>Filename completion</h3>
+      <p><kbd><kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>f</kbd></kbd></p>
+    </div>
+
+    <div class='notes'>
+      Filename completion will complete paths relative to the current working
+      directory, similar to tab completion in Unix shells.
+    </div>
+
+    <div class='slide'>
+      <h3>Context-aware word completion</h3>
+      <p>
+        <kbd><kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>p</kbd></kbd><br>
+        <span class='notes'> or</span><br>
+        <kbd><kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>n</kbd></kbd>
+      </p>
+    </div>
+
+    <div class='notes'>
+      <p>
+        Repeat the command to continue adding matches, e.g. in a document
+        that contained the string <code>Hello world</code>, you could type
+        <kbd>Hel<kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>p</kbd></kbd>
+        to complete <code>Hello</code>, and then immediately repeating
+        <kbd><kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>p</kbd></kbd>
+        would add <code>world</code>.
+      </p>
+      <p>
+        At any point, if there are multiple possible matches, you can use
+        <kbd><kbd>ctrl</kbd>+<kbd>p</kbd></kbd> and
+        <kbd><kbd>ctrl</kbd>+<kbd>n</kbd></kbd> to navigate through the options.
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Context-aware line completion</h2>
+      <p><kbd><kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>l</kbd></kbd></p>
+    </div>
+
+    <div class='notes'>
+      <p>
+        As with word completion, you can repeat the command to continue adding
+        matches.
+      </p>
+    </div>
+
+    <div class='slide'>
+      <h2>Language-aware completion</h2>
+      <p><kbd><kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>o</kbd></kbd></p>
+    </div>
+
+    <div class='notes'>
+      <p>
+        If you have Vim's filetype plugins enables, you will have access to
+        omnicomplete for some languages. This completion style will complete
+        language keywords and built in classes or functions.
+      </p>
+      <p>
+        For example, in a Ruby file, typing
+        <kbd>"Hello world".cap<kbd>ctrl</kbd>+<kbd>x</kbd><kbd>ctrl</kbd>+<kbd>o</kbd></kbd>
+        would complete to
+        <code>"Hello world".capitalize</code> or
+        <code>"Hello world".capitalize!</code>.
+    </div>
+
+    <div class='questions slide'>
+      <h2>Any questions?</h2>
+      <p>
+        <span class='notes'>Ask now, or later:</span>
+        <b><a href='http://twitter.com/georgebrock'>@georgebrock</a></b>
+        <span class='notes'>on Twitter or email</span>
+        <b><a href='mailto:george@thoughtbot.com'>george@thoughtbot.com</a></b>
+      </p>
+      <p><img src='../images/thoughtbot-large.png' alt='I work for thoughtbot'></p>
+    </div>
+
+    <script src='../javascripts/jquery.min.js'></script>
+    <script src='../javascripts/slides.js'></script>
+  </body>
+</html>
