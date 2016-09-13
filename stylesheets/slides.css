@@ -152,7 +152,8 @@ body.slideshow.dark,
   font-style:             normal;
   margin-top:             20px;
 }
-.slide img {
+.slide img,
+.slide svg {
   max-width:              640px;
 }
 .slide ul.plain,
@@ -310,13 +311,16 @@ body.slideshow ol.diagram span.present {
 }
 
 body.slideshow .slide ul.reveal li.future,
-body.slideshow .slide ol.reveal li.future {
+body.slideshow .slide ol.reveal li.future,
+body.slideshow .slide svg.reveal g.future {
   visibility:             hidden;
 }
 body.slideshow .slide ul.reveal li.present,
 body.slideshow .slide ul.reveal li.past,
 body.slideshow .slide ol.reveal li.present,
-body.slideshow .slide ol.reveal li.past {
+body.slideshow .slide ol.reveal li.past,
+body.slideshow .slide svg.reveal g.present,
+body.slideshow .slide svg.reveal g.past {
   visibility:             visible;
 }
 body.slideshow .slide ul.reveal li.past,
@@ -343,8 +347,10 @@ body.slideshow .slide.credits h3 {
   text-align:             left;
 }
 
-body.slideshow .slide img {
-  max-width:              none;
+body.slideshow .slide img,
+body.slideshow .slide svg {
+  max-width:              100%;
+  max-height:             100%;
 }
 
 body.slideshow .slide.questions b {

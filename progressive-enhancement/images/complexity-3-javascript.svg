@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 496 400"
+  role="img" aria-labelledby="title" aria-describedby="desc">
+  <title id="title">Browser windor</title>
+  <desc id="desc">A blank browser window with two tabs</desc>
+
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="3" refY="2" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,4 L5,2 z" fill="blue" />
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="3" refY="2" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,4 L5,2 z" fill="green" />
+    </marker>
+  </defs>
+
+  <g id="basics">
+    <g>
+      <path fill="#cccccc" d="M142,16H18c-1.1000061,0-2,0.8999939-2,2v123c0,1.6000061,1.3999939,3,3,3h122c1.6999969,0,3-1.3999939,3-3
+        V18C144,16.8999939,143.1000061,16,142,16z"/>
+      <path fill="#f5f5f5" d="M17,23h126v118c0,1.1000061-0.8999939,2-2,2H19c-1.1000061,0-2-0.8999939-2-2V23z"/>
+      <circle fill="#ff3333" cx="19" cy="19" r="1"/>
+      <circle fill="#aaaaaa" cx="141" cy="19" r="1"/>
+      <circle fill="#ffff33" cx="23" cy="19" r="1"/>
+      <circle fill="#39b54a" cx="27" cy="19" r="1"/>
+      <path fill="#aaaaaa" d="M73.6000061,18H59c-0.6000061,0-1,0.3999939-1,1v4h19v-1l-2.6999969-3.7000122
+        C74.1000061,18.1000061,73.8999939,18,73.6000061,18z"/>
+      <path fill="#ffffff" d="M17,23c0-0.6000061,0.3999939-1,1-1h124c0.6000061,0,1,0.3999939,1,1H17z"/>
+      <path fill="#ffffff" d="M55.6000061,18H41c-0.6000061,0-1,0.3999939-1,1v4h19v-1l-2.6999969-3.7000122
+        C56.1000061,18.1000061,55.8999939,18,55.6000061,18z"/>
+      <polygon fill="#aaaaaa" points="33,20 32,20 31,19 32,18 33,18 32,19 "/>
+      <polygon fill="#aaaaaa" points="35,20 36,20 37,19 36,18 35,18 36,19 "/>
+      <g>
+        <path fill="#666666" d="M47,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C46.8000031,19,47,19.2000122,47,19.5z"/>
+        <path fill="#666666" d="M50.5,21h-2c-0.3000031,0-0.5-0.2000122-0.5-0.5l0,0c0-0.2999878,0.1999969-0.5,0.5-0.5h2
+          c0.3000031,0,0.5,0.2000122,0.5,0.5l0,0C51,20.7999878,50.8000031,21,50.5,21z"/>
+        <path fill="#666666" d="M43,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C42.8000031,19,43,19.2000122,43,19.5z"/>
+        <path fill="#666666" d="M45,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C44.8000031,19,45,19.2000122,45,19.5z"/>
+        <path fill="#666666" d="M49,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C48.8000031,19,49,19.2000122,49,19.5z"/>
+        <path fill="#666666" d="M53,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C52.8000031,19,53,19.2000122,53,19.5z"/>
+        <path fill="#666666" d="M55,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C54.8000031,19,55,19.2000122,55,19.5z"/>
+      </g>
+      <g>
+        <path fill="#888888" d="M65,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C64.8000031,19,65,19.2000122,65,19.5z"/>
+        <path fill="#888888" d="M68.5,21h-2c-0.3000031,0-0.5-0.2000122-0.5-0.5l0,0c0-0.2999878,0.1999969-0.5,0.5-0.5h2
+          c0.3000031,0,0.5,0.2000122,0.5,0.5l0,0C69,20.7999878,68.8000031,21,68.5,21z"/>
+        <path fill="#888888" d="M61,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C60.8000031,19,61,19.2000122,61,19.5z"/>
+        <path fill="#888888" d="M63,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C62.8000031,19,63,19.2000122,63,19.5z"/>
+        <path fill="#888888" d="M67,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C66.8000031,19,67,19.2000122,67,19.5z"/>
+        <path fill="#888888" d="M71,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C70.8000031,19,71,19.2000122,71,19.5z"/>
+        <path fill="#888888" d="M73,19.5v1c0,0.2999878-0.1999969,0.5-0.5,0.5l0,0c-0.3000031,0-0.5-0.2000122-0.5-0.5v-1
+          c0-0.2999878,0.1999969-0.5,0.5-0.5l0,0C72.8000031,19,73,19.2000122,73,19.5z"/>
+        <text x="80" y="80" text-anchor="middle">GUI</text>
+      </g>
+    </g>
+
+    <g>
+      <line x1="80" y1="160" x2="80" y2="148" stroke="blue" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    </g>
+
+    <g>
+      <rect x="16" y="160" fill="transparent" stroke="blue" stroke-width="2" width="128" height="64" rx="3" ry="3"/>
+      <text x="80" y="192" text-anchor="middle">Renderer</text>
+    </g>
+
+    <g>
+      <line x1="80" y1="240" x2="80" y2="228" stroke="blue" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    </g>
+
+    <g>
+      <rect x="16" y="240" fill="transparent" stroke="blue" stroke-width="2" width="128" height="64" rx="3" ry="3"/>
+      <text x="80" y="272" text-anchor="middle">Object Model</text>
+    </g>
+
+    <g>
+      <line x1="80" y1="320" x2="80" y2="308" stroke="blue" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    </g>
+
+    <g>
+      <rect x="16" y="320" fill="transparent" stroke="blue" stroke-width="2" width="128" height="64" rx="3" ry="3"/>
+      <text x="80" y="352" text-anchor="middle">Parser</text>
+    </g>
+  </g>
+
+  <g id="app">
+    <g>
+      <line x1="144" y1="80" x2="347" y2="80" stroke="green" stroke-width="2" marker-end="url(#arrow-green)"/>
+    </g>
+    <g>
+      <line x1="417" y1="368" x2="149" y2="368" stroke="green" stroke-width="2" marker-end="url(#arrow-green)"/>
+      <line x1="416" y1="144" x2="416" y2="369" stroke="green" stroke-width="2"/>
+    </g>
+    <g>
+      <rect x="352" y="16" fill="transparent" stroke="red" stroke-width="2" width="128" height="128" rx="3" ry="3"/>
+      <text x="416" y="80" text-anchor="middle">Rails App</text>
+    </g>
+  </g>
+
+  <g id="javascript">
+    <g>
+      <line x1="144" y1="336" x2="241" y2="336" stroke="blue" stroke-width="2"/>
+      <line x1="240" y1="336" x2="240" y2="309" stroke="blue" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    </g>
+    <g>
+      <line x1="144" y1="256" x2="188" y2="256" stroke="blue" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    </g>
+    <g>
+      <line x1="192" y1="288" x2="148" y2="288" stroke="blue" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    </g>
+    <g>
+      <line x1="240" y1="112" x2="240" y2="171" stroke="blue" stroke-width="2" marker-end="url(#arrow-blue)"/>
+      <line x1="144" y1="112" x2="241" y2="112" stroke="blue" stroke-width="2"/>
+    </g>
+    <g>
+      <rect x="192" y="176" fill="transparent" stroke="blue" stroke-width="2" width="128" height="128" rx="3" ry="3"/>
+      <text x="256" y="196" text-anchor="middle">JS Runtime</text>
+    </g>
+    <g>
+      <rect x="208" y="208" fill="transparent" stroke="red" stroke-width="2" width="96" height="80" rx="3" ry="3"/>
+      <text x="256" y="248" text-anchor="middle">JavaScript</text>
+    </g>
+  </g>
+</svg>

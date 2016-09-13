@@ -1,7 +1,7 @@
 var Slides = (function() {
 
   var runLink, currentSlide, currentElement;
-  var highlightSelector = 'ins, mark, .annotation, ol.reveal li, ul.reveal li, ol.diagram li > code, ol.diagram li > span';
+  var highlightSelector = 'ins, mark, .annotation, ol.reveal li, ul.reveal li, ol.diagram li > code, ol.diagram li > span, .selectable';
 
   var start = function() {
     runLink.hide();
@@ -13,7 +13,7 @@ var Slides = (function() {
 
   var stop = function() {
     $('body').removeClass('slideshow');
-    $(highlightSelector)
+    selectableElements($('body'))
       .removeClass('past present future')
       .find('.title').remove();
     $('.slide').removeAttr('style');
@@ -24,7 +24,7 @@ var Slides = (function() {
   var next = function() {
     var elNo, slideNo, elementCount;
 
-    elementCount = $('.slide:eq(' + currentSlide + ')').find(highlightSelector).length;
+    elementCount = selectableElements($('.slide:eq(' + currentSlide + ')')).length;
     if(currentElement < elementCount - 1) {
       slideNo = currentSlide;
       elNo = currentElement + 1;
@@ -39,13 +39,13 @@ var Slides = (function() {
   var previous = function() {
     var elNo, slideNo, elementCount;
 
-    elementCount = $('.slide:eq(' + currentSlide + ')').find(highlightSelector).length;
+    elementCount = selectableElements($('.slide:eq(' + currentSlide + ')')).length;
     if(elementCount > 0 && currentElement > -1 || currentElement > 0) {
       slideNo = currentSlide;
       elNo = currentElement - 1;
     } else {
       slideNo = currentSlide - 1;
-      elNo = $('.slide:eq(' + (currentSlide - 1) + ')').find(highlightSelector).length - 1;
+      elNo = selectableElements($('.slide:eq(' + (currentSlide - 1) + ')')).length - 1;
     }
 
     show(slideNo, elNo);
@@ -74,42 +74,53 @@ var Slides = (function() {
     $('.slide').remove(slide).hide();
     slide.show();
 
-    slide.find(highlightSelector).removeClass('past present future').each(function(i) {
-      var el = $(this);
-      if(i < elNo) {
-        el
-          .addClass('past')
-          .find('.title').remove();
-      } else if(i === elNo) {
-        el.addClass('present');
-        var title = el.attr('title');
-        if(title) {
-          el.append( $('<span/>').addClass('title').text(title) );
-        }
+    selectableElements(slide)
+      .each(function () {
+        this.classList.remove('past', 'present', 'future');
+      })
+      .each(function(i) {
+        var el = $(this);
+        if(i < elNo) {
+          this.classList.add('past');
+          el.find('.title').remove();
+        } else if(i === elNo) {
+          this.classList.add('present');
+          var title = el.attr('title');
+          if(title) {
+            el.append( $('<span/>').addClass('title').text(title) );
+          }
 
-        var visibleMin = $('body').scrollTop(),
-            visibleMax = visibleMin + $(window).height(),
-            elTop = el.offset().top,
-            elBottom = elTop + el.height();
+          var visibleMin = $('body').scrollTop(),
+              visibleMax = visibleMin + $(window).height(),
+              elTop = el.offset().top,
+              elBottom = elTop + el.height();
 
-        if (elTop < visibleMin) {
-          $('body').animate({
-            scrollTop: visibleMin - $(window).height()
-          }, 250);
-        } else if (elBottom > visibleMax) {
-          $('body').animate({
-            scrollTop: visibleMin + $(window).height()
-          }, 250);
+          if (elTop < visibleMin) {
+            $('body').animate({
+              scrollTop: visibleMin - $(window).height()
+            }, 250);
+          } else if (elBottom > visibleMax) {
+            $('body').animate({
+              scrollTop: visibleMin + $(window).height()
+            }, 250);
+          }
+        } else {
+          this.classList.add('future');
+          el.find('.title').remove();
         }
-      } else {
-        el
-          .addClass('future')
-          .find('.title').remove();
-      }
-    });
+      });
 
     currentSlide = slideNo;
     currentElement = elNo;
+  }
+
+  var selectableElements = function (scope) {
+    var htmlElements, svgElements;
+
+    htmlElements = scope.find(highlightSelector);
+    svgElements = scope.find('svg.reveal').find('g');
+
+    return htmlElements.add(svgElements);
   }
 
   return {
