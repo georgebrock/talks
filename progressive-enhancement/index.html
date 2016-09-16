@@ -30,6 +30,8 @@
         visibility: hidden;
       }
       .complexity-scale li {
+        transition: left 1s linear, margin-left 1s linear, top 1s linear,
+          width 1s linear, height 1s linear;
         position: absolute;
         list-style: none;
         width: 3em;
@@ -40,13 +42,39 @@
       }
       .complexity-scale li.low {
         left: -0.5em;
+        margin-left: 0;
       }
       .complexity-scale li.medium {
         left: 50%;
         margin-left: -2em;
       }
       .complexity-scale li.high {
-        right: -0.5em;
+        left: 100%;
+        margin-left: -4em;
+      }
+      body.slideshow .complexity-scale li.future {
+        visibility: hidden;
+      }
+      body.slideshow .complexity-scale li.present,
+      body.slideshow .complexity-scale li.future {
+        top: -3em;
+        left: 50%;
+        margin-left: -3em;
+        width: 6em;
+        height: 6em;
+      }
+      .complexity-scale li.line,
+      body.slideshow .complexity-scale li.line.past,
+      body.slideshow .complexity-scale li.line.present,
+      body.slideshow .complexity-scale li.line.future {
+        transition: none;
+        width: 0;
+        padding: 0;
+        height: 4em;
+        left: 75%;
+        border-left: 0.1em dotted red;
+        margin-left: 0;
+        top: -2em;
       }
       .complexity-scale img {
         vertical-align: bottom;
@@ -566,13 +594,17 @@
       <ul class="complexity-scale reveal selectable">
         <li class="low">
           <img src="images/logo-medium.svg" width="32" height="32" alt="Medium">
+          <span class="selectable"></span>
         </li>
         <li class="high">
           <img src="images/logo-slack.svg" width="32" height="32" alt="Slack">
+          <span class="selectable"></span>
         </li>
         <li class="medium">
           <img src="images/logo-google-docs.svg" width="32" height="32" alt="Google Docs">
+          <span class="selectable"></span>
         </li>
+        <li class="line" role="presentation"></li>
       </ul>
     </div>
 
