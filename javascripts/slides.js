@@ -56,6 +56,14 @@ var Slides = (function() {
 
     $('body').toggleClass('dark', slide.hasClass('dark'));
 
+    if (slide.hasClass('svg')) {
+      var svg = slide.find('svg, img[src$=svg]')[0];
+      if (svg) {
+        svg.setAttribute('width', $(window).width());
+        svg.setAttribute('height', $(window).height());
+      }
+    }
+
     if(slideNo !== currentSlide) {
       slide.css({'padding-top': 0});
       $('body').scrollTop(0);
