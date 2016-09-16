@@ -137,6 +137,9 @@ var Slides = (function() {
             case 27: // escape
               stop();
               return false;
+            case 84: // t
+              setTimeout(next, 2000);
+              return false;
             default:
               return true;
           }
