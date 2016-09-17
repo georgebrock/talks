@@ -168,7 +168,7 @@
         </li>
         <li>
           writing JavaScript that doesn't fail for users who deliberately
-          block Google Analytics
+          block specific services, like Google Analytics
           (see 
           <a href="https://hacks.mozilla.org/2016/01/google-analytics-privacy-and-event-tracking/"><cite>Google Analytics, Privacy, and Event Tracking</cite></a>
           by <a class="h-card" href="http://stephaniehobson.ca/">Stephanie Hobson</a> for examples).
@@ -177,6 +177,11 @@
           treating technologies that aren't widely supported with care,
           so core functionality still works without them
           (e.g., at time of writing the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API#Browser_compatibility">Service Worker API isn't supported by <abbr title="Internet Explorer">IE</abbr> or Safari</a>).
+        </li>
+        <li>
+          failing gracefully when things go wrong.
+          In 2013, the Government Digital Service in the UK
+          reported that <a href="https://gds.blog.gov.uk/2013/10/21/how-many-people-are-missing-out-on-javascript-enhancement/">1.1% of visitors didn't successfully run JavaScript, but only 0.2% disabled it</a>.
         </li>
       </p>
     </div>
