@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <title>What is this machine leaning thing, anyway?</title>
+    <link rel="stylesheet" href="../stylesheets/slides.css">
+    <link rel="stylesheet" href="stylesheets/talk.css">
+  </head>
+  <body>
+    <div class="slide">
+      <h1>What is this machine learning thing, anyway?</h1>
+      <p>
+        <span class="notes">by</span>
+        <strong>
+          <a href="https://www.georgebrock.com" class="h-card">
+            George Brocklehurst</a>
+        </strong>
+        (@georgebrock)
+      </p>
+      <p>
+        <img src="../images/thoughtbot-large.png" alt="I work for thoughtbot">
+      </p>
+      <p class="notes">
+        Presented at
+        <strong class="h-event">
+          <a href="https://www.pytexas.org/2017/" class="p-name u-url">PyTexas</a>,
+          <time class="dt-start" datetime="2017-11-18">18th November 2017</time>
+        </strong>
+        and
+        <strong class="h-event">
+          <a href="https://2017.northbaypython.org/" class="p-name u-url">North Bay Python</a>,
+          <time class="dt-start" datetime="2017-12-02">2nd December 2017</time>
+        </strong>
+      </p>
+    </div>
+
+    <div class="notes">
+      <p>
+        This talk will describe the big ideas behind machine learning:
+        what it can do for us, and how it works.
+      </p>
+      <p>
+        We'll avoid two of the traps that machine learning introductions
+        often fall into.
+      </p>
+      <p>
+        We'll avoid focusing on implementation, at the expense of
+        understanding how things work; in other words, we'll try not
+        to make this sound too much like magic.
+      </p>
+    </div>
+
+    <figure class="dark slide">
+      <pre class="prettyprint lang-python"><code>from magic import wand
+
+wand.wave()</code></pre>
+      <figcaption class="notes">
+        Code examples without context can seem like magic
+      </figcaption>
+    </figure>
+
+    <div class="notes">
+      <p>
+        We'll also avoid getting so far into the details of how things
+        are implemented that we obscure simple ideas with complex
+        mathematical notation.
+      </p>
+    </div>
+
+    <figure class="slide">
+      <img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/3760ee743940188840baa8572a573cdcea5c042d" width="100%">
+      <figcaption class="notes">
+        Source: <a href="https://en.wikipedia.org/wiki/Linear_regression">&ldquo;Linear regression&rdquo; on Wikipedia</a>
+      </figcaption>
+    </figure>
+
+    <div class="slide">
+      <h2>What can machine learning do for us?</h2>
+    </div>
+
+    <div class="notes">
+      <p>
+        Let's look at a problem I recently solved using machine learning,
+        so we can see where it's useful.
+      </p>
+      <p>
+        I wanted to parse descriptions of ingredients in recipes to extract
+        the quantity, unit of measure, and ingredient name.
+      </p>
+    </div>
+
+    <figure class="dark slide">
+      <pre class="prettyprint lang-python"><code># Input
+"<mark>2</mark> <mark>tablespoons</mark> <mark>butter</mark>"
+
+# Output
+{
+    "quantity": 2,
+    "unit": "tablespoons",
+    "name": "butter",
+}</code></pre>
+      <figcaption class="notes">
+        Example input and output for the ingredient parsing problem
+      </figcaption>
+    </figure>
+
+    <div class="notes">
+      <p>
+        At first this seemed simple, but the more examples I looked at
+        the more complex the problem became. In the end I gave up trying
+        to use basic string parsing. While it was easy for me to look at
+        an ingredient string and see the answer, it was hard to determine
+        what the rules were to get a computer to do that.
+      </p>
+    </div>
+
+    <figure class="dark slide">
+      <pre class="prettyprint lang-python"><code>[
+  "2 tablespoons butter",
+  "2 cups all purpose flour",
+  "A pinch of salt",
+  "1/2 cup whole almonds (3 oz), toasted",
+  "confectioners' sugar for dusting the cake",
+  # ...
+]</code></pre>
+      <figcaption class="notes">More examples of ingredients</figcaption>
+    </figure>
+
+    <div class="slide">
+      <h3>Generalisation</h3>
+    </div>
+
+    <div class="notes">
+      <p>
+        This kind of problem is ideal for machine learning, because
+        the killer feature of machine learning is <dfn>generalisation</dfn>.
+        If a system can generalise, it can work with examples that weren't
+        explicitly considered by the design.
+      </p>
+      <p>
+        As an aside, you can read more about how I solved this in practice
+        in my article on <a href="https://robots.thoughtbot.com/named-entity-recognition"><i>Named Entity Recognition</i> on the thoughtbot blog</a>.
+      </p>
+    </div>
+
+    <div class="slide">
+      <h3>Machine learning sounds hard</h3>
+    </div>
+
+    <div class="notes">
+      <p>
+        Think about what you do when you write a typical program:
+        you consider all the possilbe types of input, and write down rules for
+        the computer to follow.
+      </p>
+      <p>
+        If there are too many possibilities to consider all of them,
+        or if our understanding of the rules is too vague to write them
+        down precisely, we can't follow this typical approach.
+      </p>
+      <p>
+        Fortunately, you've probably built generalising systems before,
+        even if you didn't realise you were doing it.
+      </p>
+    </div>
+
+    <div class="slide">
+      <h2>Remember high school science class?</h2>
+    </div>
+
+    <div class="notes">
+      <p>
+        If your high school was anything like mine, you did a lot of
+        experiments in science class. We're going to look at a simple
+        experiment here, and use it as an analogy for how machine learning
+        works.
+      </p>
+      <p>
+        One popular experiment is to measure how high a ball bounces
+        when it is dropped from different heights.
+      </p>
+      <p>
+        The aim of the experiment is to discover if there's a mathematical
+        relationship between the height of the drop and the height of the
+        bounce. If we discover such a relationship, we'll be able to
+        use it to predict the height of future bounces.
+      </p>
+    </div>
+
+    <div class="slide">
+      <h3>Step 1: Collect data</h3>
+    </div>
+
+    <div class="notes">
+      <p>
+        The first step is to collect data. We have to drop a ball a few times
+        from different heights and record the heights of the bounces.
+      </p>
+    </div>
+
+    <figure class="svg slide">
+      <div id="scatter-plot" class="plot" data-bind="plot" data-plot='{"trainingSet": true}'>
+      </div>
+
+      <figcaption class="notes">
+        A chart showing the height of a ball's first bounce
+        when it is dropped from different heights.
+      </figcaption>
+    </figure>
+
+    <div class="slide">
+      <h3>Step 2: Build a mathematical model</h3>
+    </div>
+
+    <div class="notes">
+      <p>
+        Once we have plotted our data, we can see a clear trend: the points
+        on our chart are arranged in roughly a straight line.
+        We can add a trend line to our chart to indicate the relationship
+        between drop height and bounce height.
+      </p>
+    </div>
+
+    <figure class="svg slide">
+      <div id="fit-line-plot" class="plot" data-bind="plot" data-plot='{"trainingSet": true, "trendLine": true}'>
+      </div>
+
+      <label class="notes" for="fit-line-plot-gradient">Gradient</label>
+      <input type="range" id="fit-line-plot-gradient" data-bind="angle" value="45" min="1" max="89">
+      <output class="notes" for="fit-line-plot-gradient" data-bind="gradient"></output>
+
+      <label class="notes" for="fit-line-plot-intercept">Intercept</label>
+      <input type="range" id="fit-line-plot-intercept" data-bind="intercept" value="0" min="-5" max="5" step="0.1">
+      <output class="notes" for="fit-line-plot-intercept" data-bind="intercept"></output>
+
+      <figcaption class="notes">A line of best fit on a scatter plot</figcaption>
+    </figure>
+
+    <div class="notes">
+      <p>
+        When we decide where to draw a straight trend line, we're really
+        chosing two values:
+      </p>
+
+      <ul>
+        <li>
+          <p>
+            A <b>fixed point</b> the line passes through.
+            Any point would do, but we usually use the point where the line
+            passes through the vertical axis and call it the <b>intercept</b>.
+            In our experiment, that means we're picking the value of bounce
+            height when drop height is zero, so we'd probably expect
+            something around zero.
+          </p>
+        </li>
+        <li>
+          <p>
+            The <b>gradient</b> of the line, which is a measure of how steeply
+            the line slopes. If the gradient is 2, that means the line goes up
+            2 units each time it goes across 1 unit. In our experiment, the
+            gradient tells us how much we expect the bounce height to go up by
+            each time we increase the drop height by 1 metre, so we'd probably
+            expect something between zero and one.
+          </p>
+        </li>
+      </ul>
+
+      <p>
+        Once we have these two values, we can calculate the any point on our
+        line with some simple Python code:
+      </p>
+    </div>
+
+    <figure class="dark slide">
+      <pre class="prettyprint lang-python"><code>gradient = <output class="lit" data-bind="gradient">1.0</output>
+intercept = <output class="lit" data-bind="intercept">0.0</output>
+
+def predict_bounce_height(drop_height):
+    return intercept + (drop_height * gradient)</code></pre>
+      <figcaption class="notes">Python code to predict the bounce height of a ball</figcaption>
+    </figure>
+
+    <div class="notes">
+      <p>
+        This line is a mathematical model of how a ball bounces.
+        It can make predictions about how a ball will bounce,
+        even when the drop height isn't one of the ones we measured.
+        In other words, we've built a generalising system.
+      </p>
+    </div>
+
+    <div class="slide">
+      <h4>Does our model fit our observations?</h4>
+    </div>
+
+    <div class="notes">
+      <p>
+        So far, we picked the gradient and intercept of the line by eye,
+        plotting whichever trend line looks right to us, but we might not get
+        the best possible result. To make sure we're getting the best result,
+        we need some measure of how well our trend line fits the values we
+        measured in our experiment.
+      </p>
+
+      <p>
+        The measure that's typically used is the average squared error,
+        which is calculated like this:
+      </p>
+
+      <ol>
+        <li>Measure the vertical distance between the line and each point.</li>
+        <li>Square each distance, to make sure the values are all positive.</li>
+        <li>Take the mean average.</li>
+      </ol>
+
+      <p>
+        We can visualise it like this:
+      </p>
+    </div>
+
+    <figure class="svg slide">
+      <div id="error-plot" class="plot" data-bind="plot" data-plot='{"trainingSet": true, "trendLine": true, "errors": true}'>
+      </div>
+
+      <label class="notes" for="error-plot-gradient">Gradient</label>
+      <input type="range" id="error-plot-gradient" data-bind="angle" value="45" min="1" max="89">
+      <output class="notes" for="error-plot-gradient" data-bind="gradient"></output>
+
+      <label class="notes" for="error-plot-intercept">Intercept</label>
+      <input type="range" id="error-plot-intercept" data-bind="intercept" value="0" min="-5" max="5" step="0.1">
+      <output class="notes" for="error-plot-intercept" data-bind="intercept"></output>
+
+      <label for="error">Error</label>
+      <output id="error" data-bind="error"></output>
+
+      <figcaption class="notes">Error measurements</figcaption>
+    </figure>
+
+    <div class="notes">
+      <p>
+        As we've already seen, we can use our line to predict a bounce height
+        based on a drop height.
+        We can build on that to write some code to calculate the error:
+      </p>
+
+      <pre class="prettyprint lang-python"><code>import math
+
+measurements = [
+    (1, 0.72), (2, 1.48), (3, 2.26), # etc.
+]
+
+def cost():
+    errors = [
+        predict_bounce_height(drop_height) - measured_bounce_height
+        for drop_height, measured_bounce_height
+        in measurements
+    ]
+    return sum([math.pow(err, 2) for err in errors]) / len(measurements)</code></pre>
+
+      <h4>Finding the best possible line</h4>
+
+      <p>
+        Now that we can attach a number to a line to tell us how good or bad
+        it is, we can attempt to find the best possible line.
+      </p>
+
+      <p>
+        If we plot a chart of the error against the gradient, we can see a
+        pattern: the error is lowest at a single specific point.
+      </p>
+    </div>
+
+    <figure class="svg notes">
+      <div id="error-function-plot" class="plot" data-bind="error-plot">
+      </div>
+      <figcaption>A chart showing how the error changes when we change the gradient</figcaption>
+    </figure>
+
+    <div class="notes">
+      <p>
+        There are lots of algorithms available to find the minimum value of
+        a function. For example, imagine an algorithm that makes small changes
+        to the gradient, and iteratively gets closer to the best result.
+      </p>
+
+      <p>
+        Machine learning systems often use this type of algorithm to find
+        best parameters to fit a model to our data set.
+      </p>
+    </div>
+
+    <div class="slide">
+      <h4>Does the model generalise?</h4>
+    </div>
+
+    <div class="notes">
+      <p>
+        The killer feature we were aiming for was generalisation.
+        So how do we know if our model generalises well?
+        We've seen it can make predictions, but are they right?
+      </p>
+      <p>
+        This is easy to test: we can collect more data, data we didn't
+        use to develop our model, and check if the predictions are close
+        to what we observe in the real world.
+        We can even re-use our error score calculation to see how well the
+        predictions fit our test data.
+      </p>
+    </div>
+
+    <div class="slide">
+      <h2>So, machine learning?</h2>
+
+      <p class="notes">
+        The steps in building a machine learning system are the same.
+      </p>
+
+      <ol class="plain reveal">
+        <li>Collect examples</li>
+        <li>Train a model</li>
+        <li>Test the model</li>
+        <li>Make predictions</li>
+      </ol>
+    </div>
+
+    <div class="notes">
+      <p>
+        Our data was very simple&emdash;we only had one input variable,
+        and one output variable. We could look at the data on a scatter plot
+        and it was clear we should pick a straight line as our model.
+        In real world machine learning systems, it's rarely that simple.
+        We may have to try several different models before we find one that
+        fits the data well, and generalises well to new examples.
+      </p>
+    </div>
+
+    <div class="slide">
+      <h2>What&rsquo;s next?</h2>
+    </div>
+
+    <div class="notes">
+      <p>
+        If you're looking for more information, I'd recommend this book
+        for a good overview of different types of models.
+        While it is somewhat more mathematical than this talk,
+        each equation is accompanied by a clear description and a worked
+        example.
+      </p>
+    </div>
+
+    <figure class="dark slide">
+      <a href="https://www.amazon.com/Fundamentals-Machine-Learning-Predictive-Analytics/dp/0262029448">
+        <img src="images/book.jpg" alt="Cover of 'Fundamentals of Machine Learning for Predictive Analytics'">
+      </a>
+      <figcaption class="notes">
+        <i>Fundamentals of Machine Learning for Predictive Analytics</i>
+        by Kelleher, Mac Namee, and D'Arcy.
+      </figcaption>
+    </figure>
+
+    <div class="notes">
+      <p>
+        For a more hands-on approach, check out the online course from
+        <a href="http://www.fast.ai/">fast.ai</a>.
+      </p>
+    </div>
+
+    <div class="questions slide">
+      <h2>Any questions?</h2>
+      <p>
+        <span class="notes">Ask now, or later:</span>
+        <b><a href="http://twitter.com/georgebrock">@georgebrock</a></b>
+        <span class="notes">on Twitter or email</span>
+        <b><a href="mailto:george@thoughtbot.com">george@thoughtbot.com</a></b>
+      </p>
+      <p><img src="../images/thoughtbot-large.png" alt="I work for thoughtbot"></p>
+      <p>
+        <span class="notes">These slides:</span>
+        <a href="https://georgebrock.github.io/talks/what-is-ml/">georgebrock.github.io/talks/what-is-ml</a>
+      </p>
+    </div>
+
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="https://wzrd.in/standalone/function-plot@1.18.1"></script>
+    <script src='../javascripts/lib/prettify/prettify.js'></script>
+
+    <script src="../javascripts/jquery.min.js"></script>
+    <script src="../javascripts/slides.js"></script>
+
+    <script src="javascripts/talk.js"></script>
+
+    <script>prettyPrint();</script>
+  </body>
+</html>

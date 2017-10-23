@@ -74,6 +74,8 @@ var Slides = (function() {
     $('.slide').remove(slide).hide();
     slide.show();
 
+    slide.trigger('displayed');
+
     selectableElements(slide)
       .each(function () {
         this.classList.remove('past', 'present', 'future');

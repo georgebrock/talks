@@ -95,6 +95,9 @@ body.slideshow.dark,
   margin:                 0;
   padding:                0;
 }
+.slide.dark .notes {
+  color:                  #bbb;
+}
 .slide code {
   display:                block;
   text-align:             left;
