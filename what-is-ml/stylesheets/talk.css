@@ -21,3 +21,7 @@ body.slideshow output {
 .function-plot .top-right-legend {
   display: none;
 }
+
+.slide dfn {
+  font-weight: bold;
+}
